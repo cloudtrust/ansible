@@ -1,0 +1,4 @@
+# TCP port used by etcd clients. Also resides in
+# roles/etcd/defaults/main.yaml
+flannel_version: 0.7.1
+flannel_backend: vxlan

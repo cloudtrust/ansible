@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mon
+  namespace: {{ namespace }}
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    app: mon
+spec:
+  clusterIP: None
+  ports:
+  - port: 6789
+    protocol: TCP
+    targetPort: 6789
+  selector:
+    app: mon

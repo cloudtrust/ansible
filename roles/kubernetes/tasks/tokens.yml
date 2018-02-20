@@ -1,0 +1,6 @@
+---
+
+- name: Copy token files
+  template:
+    src: "tokens.j2"
+    dest: "{{ srv_kube_path }}/{{ token_file }}"

@@ -1,0 +1,28 @@
+git_tag: initial
+dockerfile_base: cloudtrust-grafana
+archive_name: image
+git_repo: git@github.com:cloudtrust/grafana-service.git
+
+config_repo_name: dev
+config_repo: git@github.com:cloudtrust/dev-config.git
+config_branch: master
+config_env: int
+
+remote_path: /cloudtrust/grafana
+
+dockerfile: '{{ dockerfile_base }}.dockerfile'
+config_dockerfile: '{{ dockerfile_base }}-config.dockerfile'
+
+image_name: '{{ dockerfile_base }}:{{ git_tag }}'
+config_image_name: '{{ dockerfile_base }}:{{ git_tag }}-{{ config_repo_name }}-{{ config_branch }}-{{ config_env }}'
+
+pull_path: '{{ role_path }}/grafana'
+
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+
+base_name: "grafana"
+server_name: 'grafana.cloudtrust.com'
+
+

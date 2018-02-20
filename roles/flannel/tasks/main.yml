@@ -1,0 +1,16 @@
+---
+- name: Prepare and write Flannel configuration to etcd
+  include: config.yml
+
+- name: Install Flannel
+  include: client.yml
+
+- include: firewalld.yml
+  notify:
+    - restart firewalld
+
+- name: Enable flannel
+  service: name=flanneld enabled=yes
+
+- name: (Re)Start flannel
+  service: name=flanneld state=restarted

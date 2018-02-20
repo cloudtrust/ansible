@@ -1,0 +1,17 @@
+---
+
+- name: Create addon path
+  file:
+    path: "{{ kube_addon_dir }}"
+    state: directory
+
+- name: Install namespace
+  template:
+    src: namespace.yml.j2
+    dest: "{{ kube_addon_dir }}/namespace.yml"
+
+- name: Deploy DNS
+  template:
+    src: kube-dns.yml.j2
+    dest: "{{ kube_addon_dir }}/kube-dns.yml"
+

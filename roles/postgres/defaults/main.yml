@@ -1,0 +1,26 @@
+git_tag: 'initial'
+dockerfile_base: cloudtrust-postgresql
+git_repo: git@github.com:cloudtrust/postgresql-service.git
+
+config_name: dev
+config_repo: git@github.com:cloudtrust/dev-config.git
+config_branch: master
+config_env: int
+
+archive_name: image
+
+base_name: "postgresql"
+dockerfile: '{{ dockerfile_base }}.dockerfile'
+config_dockerfile: '{{ dockerfile_base }}-config.dockerfile'
+config_image_name: '{{ dockerfile_base }}:{{ git_tag }}-{{ config_name }}-{{ config_branch }}-{{ config_env }}'
+
+pull_path: '{{ role_path }}/postgresql'
+
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+
+image_name: 'cloudtrust-postgresql:{{ git_tag }}'
+
+remote_path: '/cloudtrust/postgresql'
+

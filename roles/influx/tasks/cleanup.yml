@@ -1,0 +1,12 @@
+---
+
+- name: Remove local images
+  docker_image:
+    name: '{{ image_name }}'
+    state: absent
+    force: yes
+
+- name: Remove temporary directory
+  file:
+    path: '{{ pull_path }}'
+    state: absent

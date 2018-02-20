@@ -1,0 +1,33 @@
+#Global
+
+base_name: ceph
+git_repo: git@github.com:cloudtrust/ceph-service.git
+archive_name: image
+namespace: ceph
+service_git_tag: initial
+
+remote_path: '/cloudtrust/{{ base_name }}'
+pull_path: '{{ role_path }}/pull/{{ base_name }}'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+generated_path: "{{ role_path }}/generated"
+
+#Monitor
+mon_image_name: 'cloudtrust-ceph-mon:{{ service_git_tag }}'
+mon_dockerfile: '{{ dockerfile_path }}/cloudtrust-ceph-mon.dockerfile'
+mon_secret_name: mon-secret
+mon_replicas: 2
+
+#OSD
+osd_image_name: 'cloudtrust-ceph-osd:{{ service_git_tag }}'
+osd_dockerfile: '{{ dockerfile_path }}/cloudtrust-ceph-osd.dockerfile'
+osd_secret_name: osd-secret
+
+
+#Key related stuff
+admin_key: "{{ generated_path }}/admin.key"
+mon_key: "{{ generated_path }}/mon.key"
+bootstrap_key: "{{ generated_path }}/bootstrap.key"
+admin_keyring: ceph.client.admin.keyring
+mon_keyring: ceph.mon.keyring
+bootstrap_keyring: bootstrap.keyring

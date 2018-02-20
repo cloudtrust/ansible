@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ base_name }}
+spec:
+  ports:
+  - port: 5432
+    protocol: TCP
+    targetPort: postgresql
+    name: postgresql
+  type: ClusterIP
+  selector:
+    app: {{ base_name }}

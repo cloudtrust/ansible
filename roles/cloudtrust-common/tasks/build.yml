@@ -1,0 +1,7 @@
+---
+
+- name: Pull cloudtrust-common locally
+  git:
+    repo: '{{ git_repo }}'
+    dest: '{{ pull_path }}'
+    version: '{{ commit_version }}'

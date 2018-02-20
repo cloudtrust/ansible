@@ -1,0 +1,24 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: kube-scheduler
+spec:
+  hostNetwork: true
+  containers:
+  - name: kube-controller-manager
+    image: "{{ hyperkube_image }}"
+    command:
+    - "/hyperkube"
+    - scheduler
+    {% for opt in scheduler_opts -%}
+    - "{{ opt.flag }}{% if opt.value is defined %}={{ opt.value }}{% endif %}"
+    {% endfor -%}
+    livenessProbe:
+      httpGet:
+        scheme: HTTP
+        host: 127.0.0.1
+        port: {{ scheduler_port }}
+        path: "/healthz"
+      initialDelaySeconds: 15
+      timeoutSeconds: 15

@@ -1,0 +1,29 @@
+---
+
+- name: Ensure remote path exists
+  file:
+    path: "/ingress"
+    state: directory
+  tags: deploy
+
+- name: Upload files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ remote_path }}/"
+  with_fileglob: "{{ role_path }}/files/*"
+  tags: deploy
+
+- name: Create namespace
+  shell: kubectl --kubeconfig=/etc/kubernetes/admin.kubeconfig replace --force -f {{ remote_path }}/namespace.yaml
+  run_once: true
+  tags: deploy
+
+- name: Create default backend
+  shell: kubectl --kubeconfig=/etc/kubernetes/admin.kubeconfig replace --force -f {{ remote_path }}/default-backend.yaml
+  run_once: true
+  tags: deploy
+
+- name: Create ingress nginx
+  shell: kubectl --kubeconfig=/etc/kubernetes/admin.kubeconfig replace --force -f {{ remote_path }}/ingress-nginx.yaml
+  run_once: true
+  tags: deploy

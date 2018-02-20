@@ -1,0 +1,6 @@
+---
+
+- name: Copy the Controller Manager template
+  template:
+    src: kube-controller-manager.yml.j2
+    dest: "{{ manifests_path }}/kube-controller-manager.yml"

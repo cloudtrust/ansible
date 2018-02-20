@@ -1,0 +1,48 @@
+---
+- name: Make sure directories exist
+  file:
+    path: '{{ remote_path }}'
+    state: directory
+    directory_mode: yes
+  tags: deploy
+
+- name: Push image to remote
+  copy:
+    src: '{{ context }}/{{ archive_name }}.tar'
+    dest: '{{ remote_path }}/{{ archive_name }}.tar'
+    directory_mode: yes
+  tags: deploy
+
+- name: Import docker tar image
+  docker_image:
+    name: '{{ customer_image_name }}'
+    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
+    state: present
+    force: yes
+
+- name: Copy the keycloak service template file
+  template:
+    src: "keycloak-svc.yml.j2"
+    dest: "{{ remote_path }}/keycloak-svc.yml"
+
+- name: Copy the keycloak ingress template file
+  template:
+    src: "keycloak-ing.yml.j2"
+    dest: "{{ remote_path }}/keycloak-ing.yml"
+
+- name: Copy the keycloak deployment template file
+  template:
+    src: "keycloak-dp.yml.j2"
+    dest: "{{ remote_path }}/keycloak-dp.yml"
+
+- name: Deploy keycloak service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/keycloak-svc.yml
+  run_once: true
+
+- name: Deploy keycloak ingress
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/keycloak-ing.yml
+  run_once: true
+
+- name: Deploy keycloak deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/keycloak-dp.yml
+  run_once: true

@@ -1,0 +1,9 @@
+---
+
+- name: Install required docker packages
+  shell: dnf install -y "@Container Management"
+
+- name: Install docker group
+  group:
+    name: docker
+    state: present

@@ -1,0 +1,47 @@
+---
+- name: Make sure directories exist
+  file:
+    path: '{{ remote_path }}'
+    state: directory
+    directory_mode: yes
+
+- name: Push image to remote
+  copy:
+    src: '{{ context }}/{{ archive_name }}.tar'
+    dest: '{{ remote_path }}/{{ archive_name }}.tar'
+    directory_mode: yes
+
+- name: Import docker tar image
+  docker_image:
+    name: '{{ config_image_name }}'
+    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
+    state: present
+    force: yes
+
+- name: Copy the service template file
+  template:
+    src: grafana-svc.yml.j2
+    dest: "{{ remote_path }}/grafana-svc.yml"
+
+- name: Copy the ingress template file
+  template:
+    src: grafana-ing.yml.j2
+    dest: "{{ remote_path }}/grafana-ing.yml"
+
+- name: Copy the deployment template file
+  template:
+    src: grafana-dp.yml.j2
+    dest: "{{ remote_path }}/grafana-dp.yml"
+
+    
+- name: Deploy grafana service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/grafana-svc.yml
+  run_once: true
+
+- name: Deploy grafana ingress
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/grafana-ing.yml
+  run_once: true
+
+- name: Deploy grafana deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/grafana-dp.yml
+  run_once: true

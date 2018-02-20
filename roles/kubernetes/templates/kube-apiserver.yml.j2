@@ -1,0 +1,43 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: kube-apiserver
+spec:
+  hostNetwork: true
+  containers:
+  - name: kube-apiserver
+    image: "{{ hyperkube_image }}"
+    command:
+    - "/hyperkube"
+    - apiserver
+    {% for opt in apiserver_opts -%}
+    - "{{ opt.flag }}={{ opt.value }}"
+    {% endfor -%}
+    ports:
+    - name: http
+      hostPort: {{ apiserver_port }}
+      containerPort: {{ apiserver_port }}
+    - name: https
+      hostPort: {{ apiserver_port_https }}
+      containerPort: {{ apiserver_port_https }}
+    volumeMounts:
+    - name: srvkube
+      mountPath: "{{ srv_kube_path }}"
+      readOnly: true
+    livenessProbe:
+      httpGet:
+        scheme: HTTP
+        host: 127.0.0.1
+        port: {{ apiserver_port }}
+        path: "/healthz"
+      initialDelaySeconds: 15
+      timeoutSeconds: 15
+  volumes:
+  - name: srvkube
+    hostPath:
+      path: "{{ srv_kube_path }}"
+  securityContext:
+    seLinuxOptions:
+      type: "spc_t"
+      level: "s0"

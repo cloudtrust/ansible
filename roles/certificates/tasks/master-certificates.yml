@@ -1,0 +1,21 @@
+---
+
+- name: Ensure that srv_kube_path exists
+  file:
+    path: "{{ srv_kube_path }}"
+    state: directory
+
+- name: Copy ca certificate
+  copy:
+    src: "{{ ca_cert }}"
+    dest: "{{ srv_kube_path }}"
+
+- name: Copy server key
+  copy:
+    src: "{{ master_key }}"
+    dest: "{{ srv_kube_path }}"
+
+- name: Copy server certificate
+  copy:
+    src: "{{ master_cert }}"
+    dest: "{{ srv_kube_path }}"

@@ -1,0 +1,18 @@
+# filename: roles/configure/etcd/tasks/main.yml
+---
+
+- name: Install etcd
+  include: install.yml
+  tags: install, deploy
+
+- name: Configure etcd
+  include: configure.yml
+  tags: configure, deploy
+
+- name: Configure firewalld etcd rules
+  include: firewalld.yml
+  tags: configure, deploy
+
+- name: Restart etcd
+  include: restart.yml
+  tags: restart, deploy

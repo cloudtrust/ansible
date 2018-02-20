@@ -1,0 +1,6 @@
+---
+
+- name: Copy the scheduler template
+  template:
+    src: kube-scheduler.yml.j2
+    dest: "{{ manifests_path }}/kube-scheduler.yml"

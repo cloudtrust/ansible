@@ -1,0 +1,4 @@
+---
+
+- name: Create dns
+  shell: kubectl replace --force -f "{{ kube_addon_dir }}/kube-dns.yml"

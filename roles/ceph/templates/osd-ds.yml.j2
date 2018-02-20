@@ -1,0 +1,45 @@
+---
+kind: DaemonSet
+apiVersion: extensions/v1beta1
+metadata:
+  name: osd
+  namespace: {{ namespace }}
+  labels:
+    app: osd
+spec:
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: osd
+    spec:
+      automountServiceAccountToken: false
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: {{ osd_secret_name }}
+        secret: 
+          secretName: {{ osd_secret_name }}
+      containers:
+      - name: osd
+        image: {{ osd_image_name }}
+        ports:
+        - containerPort: 6789
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: {{ osd_secret_name }}
+          mountPath: /etc/ceph

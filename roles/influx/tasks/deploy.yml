@@ -1,0 +1,28 @@
+---
+- name: Make sure directories exist
+  file:
+    path: '{{ remote_path }}'
+    state: directory
+    directory_mode: yes
+
+- name: Push image to remote
+  copy:
+    src: '{{ context }}/{{ archive_name }}.tar'
+    dest: '{{ remote_path }}/{{ archive_name }}.tar'
+    directory_mode: yes
+
+- name: Import docker tar image
+  docker_image:
+    name: '{{ config_image_name }}'
+    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
+    state: present
+    force: yes
+
+- name: Copy the template file
+  template:
+    src: influx.yml.j2
+    dest: "{{ remote_path }}/influx.yml"
+
+- name: Deploy influx
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/{{ base_name }}.yml
+  run_once: true

@@ -1,0 +1,4 @@
+master_cert: 'server.crt'
+master_key: 'server.key'
+ca_key: 'ca.key'
+ca_cert: 'ca.crt'

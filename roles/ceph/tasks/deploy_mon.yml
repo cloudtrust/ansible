@@ -1,0 +1,40 @@
+---
+
+- name: Push image to remote
+  copy:
+    src: '{{ context }}/{{ archive_name }}.tar'
+    dest: '{{ remote_path }}/{{ archive_name }}.tar'
+
+- name: Import docker tar image
+  docker_image:
+    name: '{{ mon_image_name }}'
+    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
+    state: present
+    force: yes
+
+- name: Deploy monitor secret template
+  template: 
+    src: mon-secret.yml.j2
+    dest: "{{ remote_path }}/mon-secret.yml"
+
+- name: Deploy monitor deployment template
+  template:
+    src: mon-ds.yml.j2
+    dest: "{{ remote_path }}/mon-ds.yml"
+
+- name: Deploy monitor service template
+  template:
+    src: mon-svc.yml.j2
+    dest: "{{ remote_path }}/mon-svc.yml"
+
+- name: Create monitor secret
+  shell: kubectl replace --force -f {{ remote_path }}/mon-secret.yml
+  run_once: true
+
+- name: Create ceph monitor service
+  shell: kubectl replace --force -f {{ remote_path }}/mon-svc.yml
+  run_once: true
+
+- name: Create ceph monitor deployment
+  shell: kubectl replace --force -f {{ remote_path }}/mon-ds.yml
+  run_once: true

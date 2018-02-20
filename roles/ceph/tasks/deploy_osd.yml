@@ -1,0 +1,31 @@
+---
+
+- name: Push image to remote
+  copy:
+    src: '{{ context }}/{{ archive_name }}.tar'
+    dest: '{{ remote_path }}/{{ archive_name }}.tar'
+
+- name: Import docker tar image
+  docker_image:
+    name: '{{ osd_image_name }}'
+    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
+    state: present
+    force: yes
+
+- name: Deploy osd secret template
+  template: 
+    src: osd-secret.yml.j2
+    dest: "{{ remote_path }}/osd-secret.yml"
+
+- name: Deploy osd deployment template
+  template:
+    src: osd-ds.yml.j2
+    dest: "{{ remote_path }}/osd-ds.yml"
+
+- name: Create osd secret
+  shell: kubectl replace --force -f {{ remote_path }}/osd-secret.yml
+  run_once: true
+
+- name: Create ceph osd daemonset
+  shell: kubectl replace --force -f {{ remote_path }}/osd-ds.yml
+  run_once: true

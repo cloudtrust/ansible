@@ -1,0 +1,13 @@
+---
+
+- name: Startup kubelet
+  systemd:
+    enabled: yes
+    name: kubelet
+    state: restarted
+
+- name: Startup kube-proxy
+  systemd:
+    enabled: yes
+    name: kube-proxy
+    state: restarted

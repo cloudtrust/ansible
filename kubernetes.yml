@@ -1,0 +1,50 @@
+---
+
+- name: Install various required packages
+  hosts: all
+  become: yes
+  roles:
+    - bootstrap
+  tags: deploy
+
+- name: Install and run etcd
+  hosts: etcd
+  become: yes
+  roles:
+    - etcd
+  tags: deploy
+
+- name: Install and run flannel
+  hosts: all
+  become: yes
+  roles:
+    - flannel
+  tags: deploy
+
+- name: Install and start Docker
+  hosts: all
+  become: yes
+  roles:
+    - docker
+  tags: docker, deploy
+
+- name: Generate and install certificates
+  hosts: all
+  become: yes
+  roles:
+    - certificates
+  tags: certificates
+
+- name: Install and start Kubernetes
+  hosts: all
+  become: yes
+  roles:
+    - kubernetes
+  tags: kubernetes
+
+- name: Start the Ingress controller
+  hosts: kube-slave
+  become: yes
+  roles:
+    - ingress-controller
+  tags: ingress

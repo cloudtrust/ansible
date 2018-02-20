@@ -1,0 +1,31 @@
+---
+- name: Make sure that the pull directory exists
+  file:
+    path: '{{ pull_path }}'
+    state: directory
+
+- name: Pull repository
+  git:
+    repo: '{{ git_repo }}'
+    dest: '{{ pull_path }}'
+    version: '{{ service_git_tag }}'
+
+- name: Create build context
+  file:
+    path: '{{ context }}'
+    state: directory
+
+- name: Copy dockerfile to build context
+  copy:
+    src: '{{ mon_dockerfile }}'
+    dest: '{{ context }}/Dockerfile'
+
+- name: Build the image
+  docker_image:
+    name: '{{ mon_image_name }}'
+    path: '{{ context }}'
+    pull: False
+    state: present
+    archive_path: '{{ context }}/{{ archive_name }}.tar'
+    buildargs:
+      ceph_service_git_tag: '{{ service_git_tag }}'

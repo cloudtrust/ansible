@@ -1,0 +1,17 @@
+[Unit]
+Description=Kubernetes Kube-Proxy Server
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/kube-proxy \
+            {% for opt in kube_proxy_opts -%}
+            {{ opt.flag }}={{ opt.value }} {% if not loop.last %} \
+            {% endif -%}
+            {% endfor %}
+
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

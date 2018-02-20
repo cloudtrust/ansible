@@ -1,0 +1,85 @@
+hyperkube_image: gcr.io/google-containers/hyperkube:v1.9.1
+
+kubelet_service_file: /etc/systemd/system/kubelet.service
+kubeproxy_service_file: /etc/systemd/system/kube-proxy.service
+
+apiserver_port: '8080'
+apiserver_port_https: '8443'
+master_address: "https://{{ master_ip }}:{{ apiserver_port_https }}"
+
+addons_namespace: kube-addons
+dns_server: "{{ kube_service_ip | ipaddr('net') | ipaddr(10) | ipaddr('address') }}"
+dns_replicas: 1
+upstream_dns: 8.8.8.8
+
+master_cert: 'server.crt'
+master_key: 'server.key'
+ca_key: 'ca.key'
+ca_cert: 'ca.crt'
+
+token: '2f236c1c-9844-41e4-8a82-005aab690136'
+token_file: tokens
+
+kubelet_opts: [
+    { flag: '--logtostderr', value: 'true'},
+    { flag: '--v', value: '0'},
+    { flag: '--cgroup-driver', value: 'systemd' },
+    { flag: '--kubeconfig', value: '/etc/kubernetes/admin.kubeconfig'},
+    { flag: '--allow-privileged', value: 'true' },
+    { flag: '--address', value: '0.0.0.0'},
+    { flag: '--port', value: '10250'},
+    { flag: '--pod-manifest-path', value: '{{ manifests_path }}'},
+    { flag: '--hostname-override', value: "{{ hostvars[inventory_hostname]['ansible_' + interface]['ipv4']['address'] }}" },
+    { flag: '--require-kubeconfig'},
+    { flag: '--docker-disable-shared-pid', value: 'true'},
+    { flag: '--cluster-dns', value: '{{ dns_server }}'},
+    { flag: '--cluster-domain', value: '{{ cluster_name }}' }
+  ]
+
+
+apiserver_opts: [
+    { flag: '--logtostderr', value: 'true'},
+    { flag: '--v', value: '0'},
+    { flag: '--insecure_bind_address', value: '127.0.0.1'},
+    { flag: '--insecure_port', value: '{{ apiserver_port }}'},
+    { flag: '--bind_address', value: '0.0.0.0'},
+    { flag: '--secure-port', value: '{{ apiserver_port_https }}'},
+    { flag: '--service_cluster_ip_range', value: '{{ kube_service_ip }}'},
+    { flag: '--etcd_servers', value: '{{ etcd_servers }}'},
+    { flag: '--token-auth-file', value: '{{ srv_kube_path }}/{{ token_file }}'},
+    { flag: '--tls-cert-file', value: '{{ srv_kube_path }}/{{ master_cert }}'},
+    { flag: '--tls-private-key-file', value: '{{ srv_kube_path }}/{{ master_key }}'},
+    { flag: '--service-account-key-file', value: '{{ srv_kube_path }}/{{ master_key }}' },
+    { flag: '--endpoint-reconciler-type', value: 'lease' },
+    { flag: '--admission-control', value: 'NamespaceLifecycle,ServiceAccount,DefaultStorageClass,ResourceQuota' },
+    { flag: '--allow-privileged', value: 'true' }
+  ]
+
+controller_manager_port: '10252'
+controller_manager_opts: [
+    { flag: '--logtostderr', value: 'true'},
+    { flag: '--v', value: '0'},
+    { flag: '--master', value: 'http://127.0.0.1:{{ apiserver_port }}'},
+    { flag: '--cluster-cidr', value: '{{ flannel_subnet }}/{{ flannel_prefix }}'},
+    { flag: '--leader-elect' },
+    { flag: '--root-ca-file', value: '{{ srv_kube_path }}/{{ ca_cert }}' },
+    { flag: '--service-account-private-key-file', value: '{{ srv_kube_path }}/{{ master_key }}' },
+
+  ]
+
+scheduler_port: '10251'
+scheduler_opts: [
+    { flag: '--logtostderr', value: 'true'},
+    { flag: '--v', value: '0'},
+    { flag: '--leader-elect' },
+    { flag: '--master', value: 'http://127.0.0.1:{{ apiserver_port }}'},
+  ]
+
+kube_proxy_opts: [
+    { flag: '--master', value: "{{ master_address }}"},
+    { flag: '--cluster-cidr', value: '{{ flannel_subnet }}/{{ flannel_prefix }}'},
+    { flag: '--kubeconfig', value: '/etc/kubernetes/admin.kubeconfig'},
+    { flag: '--logtostderr', value: 'true'},
+    { flag: '--v', value: '0'},
+  ]
+

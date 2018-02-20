@@ -1,0 +1,9 @@
+---
+- name: Create and generate ceph admin key
+  shell: ceph-authtool --gen-print-key > {{ admin_key }}
+
+- name: Create and generate ceph mon key
+  shell: ceph-authtool --gen-print-key > {{ mon_key }}
+
+- name: Create and generate ceph bootstrap key
+  shell: ceph-authtool --gen-print-key > {{ bootstrap_key }}

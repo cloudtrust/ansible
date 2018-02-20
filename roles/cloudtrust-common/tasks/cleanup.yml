@@ -1,0 +1,6 @@
+---
+
+- name: Remove pull dir
+  file:
+    path: "{{ pull_path }}"
+    state: absent
