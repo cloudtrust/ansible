@@ -15,7 +15,7 @@
 
 - name: Import docker tar image
   docker_image:
-    name: '{{ config_image_name }}'
+    name: '{{ image_name }}'
     load_path: '{{ remote_path }}/{{ archive_name }}.tar'
     state: present
     force: yes

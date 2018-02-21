@@ -13,16 +13,25 @@
 
 - name: Import docker tar image
   docker_image:
-    name: '{{ config_image_name }}'
+    name: '{{ image_name }}'
     load_path: '{{ remote_path }}/{{ archive_name }}.tar'
     state: present
     force: yes
 
-- name: Copy the template file
+- name: Copy the service template file
   template:
-    src: influx.yml.j2
-    dest: "{{ remote_path }}/influx.yml"
+    src: influx-svc.yml.j2
+    dest: "{{ remote_path }}/influx-svc.yml"
 
-- name: Deploy influx
-  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/{{ base_name }}.yml
+- name: Copy the deployment template file
+  template:
+    src: influx-dp.yml.j2
+    dest: "{{ remote_path }}/influx-dp.yml"
+
+- name: Deploy influx service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/influx-svc.yml
+  run_once: true
+
+- name: Deploy influx deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/influx-dp.yml
   run_once: true

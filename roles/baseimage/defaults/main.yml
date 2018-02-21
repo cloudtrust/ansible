@@ -15,4 +15,4 @@ remote_path: '/cloudtrust/baseimage'
 
 ssh_key_name: id_ssh
 keys_path: '{{ role_path }}/keys'
-env: dev
+known_hosts_file: known_hosts

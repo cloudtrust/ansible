@@ -19,29 +19,14 @@
   docker_image:
     name: '{{ image_name }}'
     path: '{{ context }}'
-    pull: False
-    nocache: "{{ force | default('no') }}"
-    force: yes
     state: present
-    buildargs:
-      sentry_service_git_tag: '{{ git_tag }}'
-
-- name: Copy config dockerfile to build context
-  copy:
-    src: '{{ dockerfile_path }}/{{ config_dockerfile }}'
-    dest: '{{ context }}/Dockerfile'
-
-- name: Build the config_image
-  docker_image:
-    name: '{{ config_image_name }}'
-    path: '{{ context }}'
     pull: False
-    state: present
-    nocache: yes
     force: yes
     archive_path: '{{ context }}/{{ archive_name }}.tar'
+    nocache: "{{ force | default('no') }}"
     buildargs:
-      environment: '{{ config_env }}'
-      branch: '{{ config_branch }}'
-      config_repository: '{{ config_repository }}'
+      config_env: '{{ config_env }}'
+      config_git_tag: '{{ config_branch }}'
+      config_repo: '{{ config_repository }}'
       sentry_service_git_tag: '{{ git_tag }}'
+

@@ -11,7 +11,7 @@ spec:
         app: {{ base_name }}
     spec:
       containers:
-      - image: {{ config_image_name }}
+      - image: {{ image_name }}
         imagePullPolicy: Never
         name: {{ base_name }}
         ports:

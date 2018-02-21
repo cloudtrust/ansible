@@ -23,26 +23,9 @@
     nocache: "{{ force | default('no') }}"
     force: yes
     state: present
-    buildargs:
-      grafana_service_git_tag: '{{ git_tag }}'
-      supertest: "haha"
-
-- name: Copy config dockerfile to build context
-  copy:
-    src: '{{ dockerfile_path }}/{{ config_dockerfile }}'
-    dest: '{{ context }}/Dockerfile'
-
-- name: Build the config_image
-  docker_image:
-    name: '{{ config_image_name }}'
-    path: '{{ context }}'
-    pull: False
-    state: present
-    nocache: yes
-    force: yes
     archive_path: '{{ context }}/{{ archive_name }}.tar'
     buildargs:
-      environment: '{{ config_env }}'
-      branch: '{{ config_branch }}'
-      config_repository: '{{ config_repo }}'
+      config_env: '{{ config_env }}'
+      config_git_tag: '{{ config_branch }}'
+      config_repo: '{{ config_repo }}'
       grafana_service_git_tag: '{{ git_tag }}'

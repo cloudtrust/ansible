@@ -1,5 +1,4 @@
 git_tag: initial
-dockerfile_base: cloudtrust-sentry
 archive_name: image
 git_repo: git@github.com:cloudtrust/sentry-service.git
 
@@ -10,10 +9,8 @@ config_env: int
 
 remote_path: /cloudtrust/sentry
 
-dockerfile: '{{ dockerfile_base }}.dockerfile'
-config_dockerfile: '{{ dockerfile_base }}-config.dockerfile'
-
-config_image_name: '{{ dockerfile_base }}:{{ git_tag }}-{{ config_repo_name }}-{{ config_branch }}-{{ config_env }}'
+dockerfile: cloudtrust-sentry.dockerfile
+image_name: 'cloudtrust-sentry:{{ git_tag }}-{{ config_repo_name }}-{{ config_branch }}-{{ config_env }}'
 
 pull_path: '{{ role_path }}/sentry'
 
@@ -22,6 +19,4 @@ base_name: sentry
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 
-image_name: '{{ dockerfile_base }}:{{ git_tag }}'
-
-server_name: 'sentry.cloudtrust.com'
+server_name: sentry.cloudtrust.com

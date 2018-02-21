@@ -31,7 +31,10 @@
     name: '{{ image_name }}'
     path: '{{ context }}'
     archive_path: '{{ context }}/{{ image_name }}.tar'
+    nocache: "{{ force | default('no') }}"
+    force: yes
     state: present
     buildargs:
       baseimage_git_tag: '{{ git_tag }}'
       ssh_key_name: '{{ ssh_key_name }}'
+      known_hosts_file: '{{ known_hosts_file }}'
