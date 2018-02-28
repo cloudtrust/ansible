@@ -8,6 +8,7 @@ spec:
   tls:
   - hosts:
     - {{ server_name }}
+    secretName: {{ tls_secret_name }}
   rules:
   - host: {{ server_name }}
     http:

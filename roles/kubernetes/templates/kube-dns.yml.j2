@@ -38,7 +38,7 @@ metadata:
     addonmanager.kubernetes.io/mode: EnsureExists
 data:
   upstreamNameservers: | 
-    ["{{ upstream_dns }}"]
+    [{% for ip in upstream_dns %}"{{ ip }}"{% if not loop.last %},{% endif %}{% endfor %}]
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment

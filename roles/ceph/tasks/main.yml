@@ -3,6 +3,7 @@
 - name: Create and generate ceph keys
   include_tasks: create_keys.yml
   delegate_to: 127.0.0.1
+  when: dynamic_keys
   tags: create_keys, build
 
 - name: Install Ceph on the nodes
@@ -34,6 +35,7 @@
 - name: Build the docker osd image
   include_tasks: build_osd.yml
   delegate_to: 127.0.0.1
+  run_once: true
   tags: build, osd
 
 - name: Deploy ceph osd 

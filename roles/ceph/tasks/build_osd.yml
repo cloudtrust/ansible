@@ -9,7 +9,7 @@
   git:
     repo: '{{ git_repo }}'
     dest: '{{ pull_path }}'
-    version: '{{ service_git_tag }}'
+    version: '{{ git_tag }}'
 
 - name: Create build context
   file:
@@ -29,4 +29,4 @@
     state: present
     archive_path: '{{ context }}/{{ archive_name }}.tar'
     buildargs:
-      ceph_service_git_tag: '{{ service_git_tag }}'
+      ceph_service_git_tag: '{{ git_tag }}'

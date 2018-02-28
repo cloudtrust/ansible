@@ -1,3 +1,4 @@
+dynamic_certs: True
 master_cert: 'server.crt'
 master_key: 'server.key'
 ca_key: 'ca.key'

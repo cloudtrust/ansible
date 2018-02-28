@@ -25,6 +25,11 @@
     src: sentry-svc.yml.j2
     dest: "{{ remote_path }}/sentry-svc.yml"
 
+- name: Copy the tls secret template file
+  template:
+    src: sentry-tls.yml.j2
+    dest: "{{ remote_path }}/sentry-tls.yml"
+
 - name: Copy the ingress template file
   template:
     src: sentry-ing.yml.j2
@@ -38,6 +43,10 @@
     
 - name: Deploy sentry service
   shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/sentry-svc.yml
+  run_once: true
+
+- name: Deploy sentry ingress
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/sentry-tls.yml
   run_once: true
 
 - name: Deploy sentry ingress

@@ -1,16 +1,16 @@
 #Global
+dynamic_keys: True
 
 base_name: ceph
 git_repo: git@github.com:cloudtrust/ceph-service.git
 archive_name: image
 namespace: ceph
-service_git_tag: initial
+git_tag: initial
 
 remote_path: '/cloudtrust/{{ base_name }}'
 pull_path: '{{ role_path }}/pull/{{ base_name }}'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
-generated_path: "{{ role_path }}/generated"
 
 #Monitor
 mon_image_name: 'cloudtrust-ceph-mon:{{ service_git_tag }}'
@@ -25,9 +25,10 @@ osd_secret_name: osd-secret
 
 
 #Key related stuff
-admin_key: "{{ generated_path }}/admin.key"
-mon_key: "{{ generated_path }}/mon.key"
-bootstrap_key: "{{ generated_path }}/bootstrap.key"
+keys_path: "{{ role_path }}/files"
+admin_key: "{{ keys_path }}/admin.key"
+mon_key: "{{ keys_path }}/mon.key"
+bootstrap_key: "{{ keys_path }}/bootstrap.key"
 admin_keyring: ceph.client.admin.keyring
 mon_keyring: ceph.mon.keyring
 bootstrap_keyring: bootstrap.keyring

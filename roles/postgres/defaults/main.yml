@@ -4,7 +4,7 @@ git_repo: git@github.com:cloudtrust/postgresql-service.git
 config_name: dev
 config_repo: git@github.com:cloudtrust/dev-config.git
 config_branch: master
-config_env: int
+config_env: ""
 
 archive_name: image
 
@@ -17,7 +17,7 @@ pull_path: '{{ role_path }}/postgresql'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 
-image_name: 'cloudtrust-postgresql:{{ git_tag }}-{{ config_name }}-{{ config_branch }}-{{ config_env }}'
+image_name: 'cloudtrust-postgresql:{{ git_tag }}-{{ config_name }}-{{ config_branch }}'
 
 remote_path: /cloudtrust/postgresql
 

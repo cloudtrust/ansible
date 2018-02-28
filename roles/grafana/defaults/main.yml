@@ -5,12 +5,11 @@ git_repo: git@github.com:cloudtrust/grafana-service.git
 config_repo_name: dev
 config_repo: git@github.com:cloudtrust/dev-config.git
 config_branch: master
-config_env: int
-
+config_env: ""
 remote_path: /cloudtrust/grafana
 
 dockerfile: 'cloudtrust-grafana.dockerfile'
-image_name: 'cloudtrust-grafana:{{ git_tag }}-{{ config_repo_name }}-{{ config_branch }}-{{ config_env }}'
+image_name: 'cloudtrust-grafana:{{ git_tag }}-{{ config_repo_name }}-{{ config_branch }}'
 
 pull_path: '{{ role_path }}/grafana'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
@@ -18,5 +17,10 @@ context: '{{ pull_path }}/build_context'
 
 base_name: grafana
 server_name: grafana.cloudtrust.com
+
+certs_path: '{{ role_path }}/files'
+tls_crt: '{{ certs_path }}/tls.crt'
+tls_key: '{{ certs_path }}/tls.key'
+tls_secret_name: grafana-tls
 
 

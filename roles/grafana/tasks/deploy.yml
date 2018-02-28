@@ -25,6 +25,11 @@
 
 - name: Copy the ingress template file
   template:
+    src: grafana-tls.yml.j2
+    dest: "{{ remote_path }}/grafana-tls.yml"
+
+- name: Copy the ingress template file
+  template:
     src: grafana-ing.yml.j2
     dest: "{{ remote_path }}/grafana-ing.yml"
 
@@ -33,9 +38,12 @@
     src: grafana-dp.yml.j2
     dest: "{{ remote_path }}/grafana-dp.yml"
 
-    
 - name: Deploy grafana service
   shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/grafana-svc.yml
+  run_once: true
+
+- name: Deploy grafana certificate secret
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/grafana-tls.yml
   run_once: true
 
 - name: Deploy grafana ingress

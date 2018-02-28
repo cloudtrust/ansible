@@ -43,11 +43,11 @@
   include_tasks: kube-addon.yml
   delegate_to: "{{ item }}"
   with_items: "{{ groups['kube-master'] }}"
-  tags: addons, deploy
+  tags: dns, deploy
 
 - name: Install DNS
   include_tasks: kube-dns.yml
   delegate_to: "{{ item }}"
   with_items: "{{ groups['kube-master'][0] }}"
   run_once: true
-  tags: addons, dns, deploy
+  tags: dns, deploy
