@@ -1,10 +1,7 @@
 ca.crt
-ca.csr
 ca.key
 ca.srl
-csr.conf
-master.csr
-master_csr.conf
 server.crt
+server.csr
 server.key
-tokens
+server_csr.conf

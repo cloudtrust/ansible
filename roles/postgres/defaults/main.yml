@@ -1,9 +1,3 @@
-git_tag: 'initial'
-git_repo: git@github.com:cloudtrust/postgresql-service.git
-
-config_name: dev
-config_repo: git@github.com:cloudtrust/dev-config.git
-config_branch: master
 config_env: ""
 
 archive_name: image

@@ -2,10 +2,6 @@ dockerfile: cloudtrust-baseimage.dockerfile
 
 pull_path: '{{ role_path }}/baseimage'
 
-git_repo: 'git@github.com:cloudtrust/baseimage.git'
-git_tag: initial
-
-
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 image_path: '{{ pull_path }}/images'
@@ -13,6 +9,4 @@ image_name: 'cloudtrust-baseimage:{{ tag }}'
 
 remote_path: '/cloudtrust/baseimage'
 
-ssh_key_name: id_ssh
 keys_path: '{{ role_path }}/keys'
-known_hosts_file: known_hosts

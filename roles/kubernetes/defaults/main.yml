@@ -10,7 +10,6 @@ master_address: "https://{{ master_ip }}:{{ apiserver_port_https }}"
 addons_namespace: kube-addons
 dns_server: "{{ kube_service_ip | ipaddr('net') | ipaddr(10) | ipaddr('address') }}"
 dns_replicas: 1
-upstream_dns: ["8.8.8.8","8.8.7.7"]
 
 master_cert: 'server.crt'
 master_key: 'server.key'

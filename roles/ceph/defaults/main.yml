@@ -1,11 +1,8 @@
 #Global
-dynamic_keys: True
 
 base_name: ceph
-git_repo: git@github.com:cloudtrust/ceph-service.git
 archive_name: image
 namespace: ceph
-git_tag: initial
 
 remote_path: '/cloudtrust/{{ base_name }}'
 pull_path: '{{ role_path }}/pull/{{ base_name }}'

@@ -1,13 +1,4 @@
-git_tag: initial
-git_repo: 'git@github.com:cloudtrust/keycloak-service.git'
-
 dockerfile: 'cloudtrust-keycloak.dockerfile'
-
-event_emitter_git_tag: 'master'
-
-config_repo_name: dev
-config_repo: 'git@github.com:cloudtrust/dev-config.git'
-config_git_tag: master
 config_env: ''
 image_name: 'cloudtrust-keycloak:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
 
@@ -20,8 +11,6 @@ context: '{{ pull_path }}/build_context'
 
 base_name: 'keycloak'
 remote_path: '/cloudtrust/keycloak'
-
-server_name: keycloak.cloudtrust.com
 
 certs_path: '{{ role_path }}/files'
 tls_crt: '{{ certs_path }}/tls.crt'
