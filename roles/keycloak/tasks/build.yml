@@ -26,7 +26,8 @@
     archive_path: '{{ context }}/{{ archive_name }}.tar'
     buildargs:
       keycloak_service_git_tag: '{{ git_tag }}'
-      event_emitter_git_tag: '{{ event_emitter_git_tag }}'
-      config_env: '{{ config_env }}'
+      event_emitter_release: '{{ event_emitter_release }}'
+      keycloak_bridge_release: '{{ keycloak_bridge_release }}'
+      jaeger_release: '{{ jaeger_release }}'
       config_git_tag: '{{ config_git_tag }}'
       config_repo: '{{ config_repo }}'
