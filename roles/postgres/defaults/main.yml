@@ -11,7 +11,7 @@ pull_path: '{{ role_path }}/postgresql'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 
-image_name: 'cloudtrust-postgresql:{{ git_tag }}-{{ config_name }}-{{ config_branch }}'
+image_name: 'cloudtrust-postgresql:{{ config_name }}-{{ config_git_tag }}'
 
 remote_path: /cloudtrust/postgresql
 

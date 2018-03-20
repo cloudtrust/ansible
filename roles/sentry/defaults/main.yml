@@ -2,7 +2,7 @@ base_name: sentry
 
 
 dockerfile: cloudtrust-sentry.dockerfile
-image_name: 'cloudtrust-sentry:{{ git_tag }}-{{ config_repo_name }}-{{ config_branch }}'
+image_name: 'cloudtrust-sentry:{{ config_repo_name }}-{{ config_git_tag }}'
 archive_name: image
 
 config_env: ""

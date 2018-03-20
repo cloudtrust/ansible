@@ -25,7 +25,17 @@
     src: "keycloak-svc.yml.j2"
     dest: "{{ remote_path }}/keycloak-svc.yml"
 
-- name: Copy the keycloak ingress template file
+- name: Copy the keycloak headless service template file
+  template:
+    src: "keycloak-headless-svc.yml.j2"
+    dest: "{{ remote_path }}/keycloak-headless-svc.yml"
+
+- name: Copy the keycloak config map template file
+  template:
+    src: "keycloak-cm.yml.j2"
+    dest: "{{ remote_path }}/keycloak-cm.yml"
+
+- name: Copy the keycloak tls secret template file
   template:
     src: "keycloak-tls.yml.j2"
     dest: "{{ remote_path }}/keycloak-tls.yml"
@@ -44,8 +54,16 @@
   shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/keycloak-svc.yml
   run_once: true
 
-- name: Deploy keycloak ingress
+- name: Deploy keycloak headless service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/keycloak-headless-svc.yml
+  run_once: true
+
+- name: Deploy keycloak tls secret
   shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/keycloak-tls.yml
+  run_once: true
+
+- name: Deploy keycloak config map
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/keycloak-cm.yml
   run_once: true
 
 - name: Deploy keycloak ingress

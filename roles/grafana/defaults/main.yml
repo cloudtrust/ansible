@@ -4,7 +4,7 @@ config_env: ""
 remote_path: /cloudtrust/grafana
 
 dockerfile: 'cloudtrust-grafana.dockerfile'
-image_name: 'cloudtrust-grafana:{{ git_tag }}-{{ config_repo_name }}-{{ config_branch }}'
+image_name: 'cloudtrust-grafana:{{ config_repo_name }}-{{ config_branch }}'
 
 pull_path: '{{ role_path }}/grafana'
 dockerfile_path: '{{ pull_path }}/dockerfiles'

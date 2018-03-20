@@ -3,6 +3,11 @@
 - name: Deploy the cloudtrust base-image
   hosts: 127.0.0.1
   tasks:
+    - name: Ensure that config dir is empty
+      file:
+        path: '{{ playbook_dir }}/config'
+        state: absent
+      tags: always
     - name: Get that repo
       git:
         repo: '{{ git_repo }}'
@@ -14,9 +19,24 @@
       shell: rsync -a {{ playbook_dir }}/config/deployable/ {{ playbook_dir }}/
       register: msg
       tags: deploy
+    
+    - name: Generate .gitignore file for current deployment
+      shell: echo -e "config\ninventories"; find . -type f | sed 's:\./::'
+      args:
+        chdir: '{{ playbook_dir }}/config/deployable'
+      register: deployed_files
+      tags: deploy
 
-    - name: debug
-      debug: msg={{ msg.stdout_lines }}
+    - name: Output deployed_files
+      debug: msg={{ deployed_files.stdout_lines }}
+      tags: deploy
+
+    - name: Print .gitignore
+      lineinfile:
+        path: '{{ playbook_dir }}/.gitignore'
+        line: '{{ item }}'
+        state: present
+      with_items: '{{ deployed_files.stdout_lines }}'
       tags: deploy
 
     - name: Clean config

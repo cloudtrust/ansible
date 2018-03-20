@@ -29,5 +29,7 @@
       event_emitter_release: '{{ event_emitter_release }}'
       keycloak_bridge_release: '{{ keycloak_bridge_release }}'
       jaeger_release: '{{ jaeger_release }}'
+      wsfed_release: '{{ wsfed_release }}'
+      keycloak_export_release: '{{ keycloak_export_release }}'
       config_git_tag: '{{ config_git_tag }}'
       config_repo: '{{ config_repo }}'

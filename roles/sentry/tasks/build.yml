@@ -25,8 +25,9 @@
     archive_path: '{{ context }}/{{ archive_name }}.tar'
     nocache: "{{ force | default('no') }}"
     buildargs:
-      config_env: '{{ config_env }}'
-      config_git_tag: '{{ config_branch }}'
+      config_git_tag: '{{ config_git_tag }}'
       config_repo: '{{ config_repo }}'
       sentry_service_git_tag: '{{ git_tag }}'
+      sentry_wheel_release: '{{ sentry_wheel_release }}'
+      sentry_wheel_version: '{{ sentry_wheel_version }}'
 

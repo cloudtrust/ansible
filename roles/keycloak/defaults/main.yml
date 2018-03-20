@@ -1,6 +1,6 @@
 dockerfile: 'cloudtrust-keycloak.dockerfile'
 config_env: ''
-image_name: 'cloudtrust-keycloak:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
+image_name: 'cloudtrust-keycloak:{{ config_repo_name }}-{{ config_git_tag }}'
 
 archive_name: image
 
@@ -17,3 +17,8 @@ tls_crt: '{{ certs_path }}/tls.crt'
 tls_key: '{{ certs_path }}/tls.key'
 tls_secret_name: keycloak-tls
 
+replicas: 2
+
+jgroups_tcp_port: 7800
+jgroups_initial_hosts: "{% for i in range(replicas) %}keycloak-{{ i }}.keycloak.default.svc.{{ cluster_name }}[{{ jgroups_tcp_port }}]{% if not loop.last %},{% endif %}{% endfor %}"
+ 

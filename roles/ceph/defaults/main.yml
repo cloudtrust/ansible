@@ -10,13 +10,13 @@ dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 
 #Monitor
-mon_image_name: 'cloudtrust-ceph-mon:{{ service_git_tag }}'
+mon_image_name: 'cloudtrust-ceph-mon:{{ git_tag }}'
 mon_dockerfile: '{{ dockerfile_path }}/cloudtrust-ceph-mon.dockerfile'
 mon_secret_name: mon-secret
 mon_replicas: 2
 
 #OSD
-osd_image_name: 'cloudtrust-ceph-osd:{{ service_git_tag }}'
+osd_image_name: 'cloudtrust-ceph-osd:{{ git_tag }}'
 osd_dockerfile: '{{ dockerfile_path }}/cloudtrust-ceph-osd.dockerfile'
 osd_secret_name: osd-secret
 

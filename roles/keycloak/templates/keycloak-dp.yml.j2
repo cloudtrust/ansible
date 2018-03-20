@@ -1,8 +1,14 @@
-apiVersion: apps/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: {{ base_name }}
 spec:
+  podManagementPolicy: Parallel
+  serviceName: {{ base_name }}
+  replicas: {{ replicas }}
+  selector:
+    matchLabels:
+      app: {{ base_name }}
   template:
     metadata:
       annotations:
@@ -14,6 +20,10 @@ spec:
       - image: {{ image_name }}
         imagePullPolicy: Never
         name: {{ base_name }}
+        args:
+          - "/sbin/init"
+          - "--log-level=debug"
+          - "--log-target=journal"
         ports:
           - containerPort: 80
             name: http
@@ -25,6 +35,15 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
+        - name: config
+          mountPath: /opt/keycloak/keycloak/standalone/configuration/standalone.xml
+          subPath: standalone.xml
+        readinessProbe:
+          httpGet:
+            path: /auth
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 3
       volumes:
       - name: run
         emptyDir:
@@ -35,3 +54,6 @@ spec:
       - name: cgroups
         hostPath:
           path: /sys/fs/cgroup
+      - name: config
+        configMap:
+          name: keycloak
