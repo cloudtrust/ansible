@@ -1,0 +1,14 @@
+archive_name: kibana
+
+git_repo: git@github.com:cloudtrust/elasticsearch-service.git
+
+dockerfile: cloudtrust-kibana.dockerfile
+
+pull_path: '{{ role_path }}/kibana'
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+image_name: 'cloudtrust-kibana:{{ config_name }}-{{ config_git_tag }}'
+
+remote_path: /cloudtrust/elasticsearch
+

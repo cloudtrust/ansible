@@ -1,4 +1,7 @@
 ---
+- name: Debug
+  debug: 
+    msg: "Hostname is {{ inventory_hostname }}"
 
 - name: Ensure that srv_kube_path exists
   file:
@@ -12,10 +15,10 @@
 
 - name: Copy server key
   copy:
-    src: "{{ master_key }}"
+    src: "{{ role_path }}/files/{{ master_key }}"
     dest: "{{ srv_kube_path }}"
 
 - name: Copy server certificate
   copy:
-    src: "{{ master_cert }}"
+    src: "{{ role_path }}/files/{{ master_cert }}"
     dest: "{{ srv_kube_path }}"

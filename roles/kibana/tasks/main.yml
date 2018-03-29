@@ -1,0 +1,17 @@
+---
+
+- name: Build image locally
+  include_tasks: build.yml
+  tags: build
+  delegate_to: 127.0.0.1
+  run_once: true
+
+- name: Expand mmapfs usage
+  sysctl:
+    name: 'vm.max_map_count'
+    value: '262144'
+  tags: always
+
+- name: Deploy kibana
+  include_tasks: deploy.yml
+  tags: deploy

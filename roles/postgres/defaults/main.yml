@@ -1,4 +1,5 @@
 config_env: ""
+git_repo: git@github.com:cloudtrust/postgresql-service.git
 
 archive_name: image
 

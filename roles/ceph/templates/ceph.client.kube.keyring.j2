@@ -1,0 +1,4 @@
+[client.kube]
+  key = {{ lookup('file', user_key) }}
+  caps mon = "allow r"
+  caps osd = "allow rwx pool={{ pool_name }}"

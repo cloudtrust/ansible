@@ -28,6 +28,9 @@ spec:
       - name: {{ osd_secret_name }}
         secret: 
           secretName: {{ osd_secret_name }}
+      - name: {{ osd_data_dir }}
+        hostPath:
+          path: /var/lib/ceph/osd
       containers:
       - name: osd
         image: {{ osd_image_name }}
@@ -43,3 +46,9 @@ spec:
           readOnly: true
         - name: {{ osd_secret_name }}
           mountPath: /etc/ceph
+        - name: {{ osd_data_dir }}
+          mountPath: /var/lib/ceph/osd
+      securityContext:
+        seLinuxOptions:
+          type: "spc_t"
+          level: "s0"

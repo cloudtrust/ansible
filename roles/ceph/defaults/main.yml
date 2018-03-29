@@ -1,7 +1,8 @@
 #Global
 
 base_name: ceph
-archive_name: image
+mon_archive_name: mon
+osd_archive_name: osd
 namespace: ceph
 
 remote_path: '/cloudtrust/{{ base_name }}'
@@ -15,17 +16,27 @@ mon_dockerfile: '{{ dockerfile_path }}/cloudtrust-ceph-mon.dockerfile'
 mon_secret_name: mon-secret
 mon_replicas: 2
 
+mon_data_dir: mon-data
+
 #OSD
 osd_image_name: 'cloudtrust-ceph-osd:{{ git_tag }}'
 osd_dockerfile: '{{ dockerfile_path }}/cloudtrust-ceph-osd.dockerfile'
 osd_secret_name: osd-secret
 
+osd_data_dir: osd-data
+
+# Storage class
+storageclass: rbd
+pool_name: hddpool
 
 #Key related stuff
 keys_path: "{{ role_path }}/files"
 admin_key: "{{ keys_path }}/admin.key"
 mon_key: "{{ keys_path }}/mon.key"
 bootstrap_key: "{{ keys_path }}/bootstrap.key"
+user_key: "{{ keys_path }}/user.key"
+admin_key_secret_name: "ceph.client.admin.keyring"
+user_key_secret_name: "ceph.client.kube.keyring"
 admin_keyring: ceph.client.admin.keyring
 mon_keyring: ceph.mon.keyring
 bootstrap_keyring: bootstrap.keyring

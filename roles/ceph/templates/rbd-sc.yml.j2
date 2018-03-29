@@ -1,13 +1,14 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: ceph
+  name: {{ storageclass }}
 provisioner: ceph.com/rbd
 parameters:
-  monitors: ceph-mon.ceph.svc.kubetest:6789
+  monitors: mon.ceph.svc.{{ cluster_name }}:6789
   adminId: admin
-  adminSecretName: ceph-client-key
-  adminSecretNamespace: ceph
-  pool: kube
-  userId: admin
-  userSecretName: ceph-client-key
+  adminSecretName: {{ admin_key_secret_name }}
+  adminSecretNamespace: {{ namespace }}
+  pool: {{ pool_name }}
+  fsType: xfs
+  userId: kube
+  userSecretName: {{ user_key_secret_name }}

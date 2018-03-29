@@ -30,6 +30,9 @@ spec:
       - name: {{ mon_secret_name }}
         secret: 
           secretName: {{ mon_secret_name }}
+      - name: {{ mon_data_dir }}
+        hostPath:
+          path: /var/lib/ceph/mon
       containers:
       - name: mon
         image: {{ mon_image_name }}
@@ -45,6 +48,12 @@ spec:
           readOnly: true
         - name: {{ mon_secret_name }}
           mountPath: /etc/ceph
+        - name: {{ mon_data_dir }}
+          mountPath: /var/lib/ceph/mon
+      securityContext:
+        seLinuxOptions:
+          type: "spc_t"
+          level: "s0"
 #         lifecycle:
 #           preStop:
 #             exec:

@@ -1,11 +1,12 @@
 ---
 - name: Prepare and write Flannel configuration to etcd
-  include: config.yml
+  include_tasks: config.yml
 
 - name: Install Flannel
-  include: client.yml
+  include_tasks: client.yml
 
-- include: firewalld.yml
+- name: Add firewall rules
+  include: firewalld.yml
   notify:
     - restart firewalld
 

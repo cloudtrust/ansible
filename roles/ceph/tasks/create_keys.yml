@@ -7,3 +7,6 @@
 
 - name: Create and generate ceph bootstrap key
   shell: ceph-authtool --gen-print-key > {{ bootstrap_key }}
+
+- name: Create and generate ceph user key
+  shell: ceph-authtool --gen-print-key > {{ user_key }}

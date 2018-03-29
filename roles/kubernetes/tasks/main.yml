@@ -5,8 +5,7 @@
 
 - name: Apiserver
   include_tasks: apiserver.yml
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['kube-master'] }}"
+  when: inventory_hostname in groups['kube-master']
   tags: apiserver, deploy
 
 - name: Deploy admin access token
@@ -15,14 +14,12 @@
   
 - name: Controller Manager
   include_tasks: controller-manager.yml
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['kube-master'] }}"
+  when: inventory_hostname in groups['kube-master']
   tags: controller-manager, deploy
 
 - name: Scheduler
   include_tasks: scheduler.yml
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['kube-master'] }}"
+  when: inventory_hostname in groups['kube-master']
   tags: scheduler, deploy
 
 - name: Kube-Proxy
@@ -35,19 +32,16 @@
 
 - name: Wait for kubernetes to be up
   include_tasks: start_wait.yml
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['kube-master'] }}"
+  when: inventory_hostname in groups['kube-master']
   tags: start, deploy
 
 - name: Prepare dns dirs
   include_tasks: kube-addon.yml
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['kube-master'] }}"
+  when: inventory_hostname in groups['kube-master']
   tags: dns, deploy
 
 - name: Install DNS
   include_tasks: kube-dns.yml
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['kube-master'][0] }}"
+  when: inventory_hostname in groups['kube-master']
   run_once: true
   tags: dns, deploy

@@ -1,0 +1,11 @@
+git_tag: initial
+
+config_name: dev
+config_git_tag: master
+
+headless_service_name: elasticsearch-master
+data_replicas: 1
+master_replicas: 1
+data_path: /var/lib/elasticsearch
+
+elasticsearch_cluster_name: 'elastic_cluster'

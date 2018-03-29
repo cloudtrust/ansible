@@ -2,15 +2,20 @@
 
 - name: Push image to remote
   copy:
-    src: '{{ context }}/{{ archive_name }}.tar'
-    dest: '{{ remote_path }}/{{ archive_name }}.tar'
+    src: '{{ pull_path }}/{{ mon_archive_name }}.tar'
+    dest: '{{ remote_path }}/{{ mon_archive_name }}.tar'
 
 - name: Import docker tar image
   docker_image:
     name: '{{ mon_image_name }}'
-    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
+    load_path: '{{ remote_path }}/{{ mon_archive_name }}.tar'
     state: present
     force: yes
+
+- name: Create mon data directory
+  file:
+    path: /var/lib/ceph/mon
+    state: directory
 
 - name: Deploy monitor secret template
   template: 

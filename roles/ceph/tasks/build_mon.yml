@@ -25,7 +25,12 @@
     name: '{{ mon_image_name }}'
     path: '{{ context }}'
     pull: False
+    force: yes
+    nocache: "{{ force | default('no') }}"
     state: present
-    archive_path: '{{ context }}/{{ archive_name }}.tar'
+    archive_path: '{{ pull_path }}/{{ mon_archive_name }}.tar'
     buildargs:
       ceph_service_git_tag: '{{ git_tag }}'
+      ceph_tools_git_tag: '{{ ceph_tools_git_tag }}'
+      config_repo: '{{ config_repo }}'
+      config_git_tag: '{{ config_git_tag }}'

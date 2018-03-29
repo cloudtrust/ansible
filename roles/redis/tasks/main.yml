@@ -1,0 +1,12 @@
+---
+
+- name: Build baseimage locally
+  include_tasks: build.yml
+  tags: build
+  run_once: true
+  delegate_to: 127.0.0.1
+
+- name: Export tar image and send to remote
+  include_tasks: deploy.yml
+  tags: deploy
+

@@ -8,8 +8,7 @@
 
 - name: Master Certificates
   include_tasks: master-certificates.yml
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['kube-master'] }}"
+  when: inventory_hostname in groups['kube-master']
   tags: certificates, deploy
 
 

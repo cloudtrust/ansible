@@ -1,0 +1,14 @@
+archive_name: logstash
+
+remote_path: /cloudtrust/logstash
+
+git_tag: initial
+git_repo: git@github.com:cloudtrust/logstash-service.git
+
+dockerfile: 'cloudtrust-logstash.dockerfile'
+image_name: 'cloudtrust-logstash:{{ git_tag }}'
+
+pull_path: '{{ role_path }}/logstash'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+replicas: 1

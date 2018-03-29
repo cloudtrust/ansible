@@ -1,0 +1,21 @@
+---
+
+- name: Build image locally
+  include_tasks: build.yml
+  tags: build
+  delegate_to: 127.0.0.1
+  run_once: true
+
+- name: Expand mmapfs usage
+  sysctl:
+    name: 'vm.max_map_count'
+    value: '262144'
+  tags: always
+
+- name: Deploy elasticsearch master 
+  include_tasks: master.yml
+  tags: deploy, master
+
+- name: Deploy elasticsearch data 
+  include_tasks: data.yml
+  tags: deploy, data

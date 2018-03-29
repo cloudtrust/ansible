@@ -1,0 +1,7 @@
+---
+
+- name: Deploy logstash
+  hosts: all
+  roles:
+    - logstash
+  tags: logstash

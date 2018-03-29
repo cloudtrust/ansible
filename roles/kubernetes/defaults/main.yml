@@ -15,6 +15,7 @@ master_cert: 'server.crt'
 master_key: 'server.key'
 ca_key: 'ca.key'
 ca_cert: 'ca.crt'
+service_account_key_file: 'service-account-key-file.key'
 
 token: '2f236c1c-9844-41e4-8a82-005aab690136'
 token_file: tokens
@@ -29,12 +30,14 @@ kubelet_opts: [
     { flag: '--port', value: '10250'},
     { flag: '--pod-manifest-path', value: '{{ manifests_path }}'},
     { flag: '--hostname-override', value: "{{ hostvars[inventory_hostname]['ansible_' + interface]['ipv4']['address'] }}" },
-    { flag: '--require-kubeconfig'},
     { flag: '--docker-disable-shared-pid', value: 'true'},
     { flag: '--cluster-dns', value: '{{ dns_server }}'},
     { flag: '--cluster-domain', value: '{{ cluster_name }}' },
     { flag: '--fail-swap-on', value: 'false' },
   ]
+
+#    { flag: '--anonymous-auth', value: 'false'},
+#    { flag: '--authentication-token-webhook' }, 
 
 
 apiserver_opts: [
@@ -49,7 +52,7 @@ apiserver_opts: [
     { flag: '--token-auth-file', value: '{{ srv_kube_path }}/{{ token_file }}'},
     { flag: '--tls-cert-file', value: '{{ srv_kube_path }}/{{ master_cert }}'},
     { flag: '--tls-private-key-file', value: '{{ srv_kube_path }}/{{ master_key }}'},
-    { flag: '--service-account-key-file', value: '{{ srv_kube_path }}/{{ master_key }}' },
+    { flag: '--service-account-key-file', value: '{{ srv_kube_path }}/{{ service_account_key_file }}' },
     { flag: '--endpoint-reconciler-type', value: 'lease' },
     { flag: '--admission-control', value: 'NamespaceLifecycle,ServiceAccount,DefaultStorageClass,ResourceQuota' },
     { flag: '--allow-privileged', value: 'true' }
@@ -63,7 +66,7 @@ controller_manager_opts: [
     { flag: '--cluster-cidr', value: '{{ flannel_subnet }}/{{ flannel_prefix }}'},
     { flag: '--leader-elect' },
     { flag: '--root-ca-file', value: '{{ srv_kube_path }}/{{ ca_cert }}' },
-    { flag: '--service-account-private-key-file', value: '{{ srv_kube_path }}/{{ master_key }}' },
+    { flag: '--service-account-private-key-file', value: '{{ srv_kube_path }}/{{ service_account_key_file }}' },
 
   ]
 
@@ -76,7 +79,6 @@ scheduler_opts: [
   ]
 
 kube_proxy_opts: [
-    { flag: '--master', value: "{{ master_address }}"},
     { flag: '--cluster-cidr', value: '{{ flannel_subnet }}/{{ flannel_prefix }}'},
     { flag: '--kubeconfig', value: '/etc/kubernetes/admin.kubeconfig'},
     { flag: '--logtostderr', value: 'true'},

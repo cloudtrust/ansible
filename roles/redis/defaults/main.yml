@@ -1,0 +1,17 @@
+archive_name: redis
+
+remote_path: /cloudtrust/redis
+
+git_tag: initial
+git_repo: git@github.com:cloudtrust/redis-service.git
+config_git_tag: master
+config_repo_name: dev
+config_repo: git@github.com:cloudtrust/dev-config.git
+
+dockerfile: 'cloudtrust-redis.dockerfile'
+image_name: 'cloudtrust-redis:{{ config_repo_name }}-{{config_git_tag }}'
+
+pull_path: '{{ role_path }}/redis'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+replicas: 1

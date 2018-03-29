@@ -14,7 +14,7 @@ ExecStart=/usr/bin/kubelet \
             {% endif -%}
             {% endfor %}
 
-Restart=on-failure
+Restart=always
 KillMode=process
 
 [Install]

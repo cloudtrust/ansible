@@ -1,0 +1,7 @@
+---
+
+- name: Deploy elasticsearch
+  hosts: all
+  roles:
+    - elasticsearch
+  tags: elasticsearch

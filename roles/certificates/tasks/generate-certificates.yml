@@ -1,21 +1,26 @@
 ---
 
+- name: Create the directories
+  file:
+    path: "{{ role_path }}/{{ inventory_hostname }}"
+    state: directory
+
 - name: Create the master CA key
-  command: openssl genrsa -out "{{ role_path }}/files/{{ ca_key }}" 2048
+  command: openssl genrsa -out "{{ role_path }}/{{ inventory_hostname }}/{{ ca_key }}" 2048
 
 - name: Create the CA certificate
-  command: openssl req -x509 -new -nodes -key "{{ role_path }}/files/{{ ca_key }}" -subj "/CN=Cloudtrust" -days 10000 -out "{{ role_path }}/files/{{ ca_cert }}"
+  command: openssl req -x509 -new -nodes -key "{{ role_path }}/{{ inventory_hostname }}/{{ ca_key }}" -subj "/CN=Cloudtrust" -days 10000 -out "{{ role_path }}/{{ inventory_hostname }}/{{ ca_cert }}"
 
 - name: Create the master server key
-  command: openssl genrsa -out "{{ role_path }}/files/{{ master_key }}" 2048
+  command: openssl genrsa -out "{{ role_path }}/{{ inventory_hostname }}/{{ master_key }}" 2048
 
 - name: Create the signing request conf
   template:
     src: master_csr.conf.j2
-    dest: "{{ role_path }}/files/master_csr.conf"
+    dest: "{{ role_path }}/{{ inventory_hostname }}/master_csr.conf"
 
 - name: Create the signing request
-  command: openssl req -new -key "{{ role_path }}/files/{{ master_key }}" -out "{{ role_path }}/files/master.csr" -config "{{ role_path }}/files/master_csr.conf"
+  command: openssl req -new -key "{{ role_path }}/{{ inventory_hostname }}/{{ master_key }}" -out "{{ role_path }}/{{ inventory_hostname }}/master.csr" -config "{{ role_path }}/{{ inventory_hostname }}/master_csr.conf"
 
 - name: Create the server certificate
-  command: openssl x509 -req -in "{{ role_path }}/files/master.csr" -CA "{{ role_path }}/files/{{ ca_cert }}" -CAkey "{{ role_path }}/files/{{ ca_key }}" -CAcreateserial -out "{{ role_path }}/files/{{ master_cert }}" -days 10000 -extensions v3_ext -extfile "{{ role_path }}/files/master_csr.conf"
+  command: openssl x509 -req -in "{{ role_path }}/{{ inventory_hostname }}/master.csr" -CA "{{ role_path }}/{{ inventory_hostname }}/{{ ca_cert }}" -CAkey "{{ role_path }}/{{ inventory_hostname }}/{{ ca_key }}" -CAcreateserial -out "{{ role_path }}/{{ inventory_hostname }}/{{ master_cert }}" -days 10000 -extensions v3_ext -extfile "{{ role_path }}/{{ inventory_hostname }}/master_csr.conf"

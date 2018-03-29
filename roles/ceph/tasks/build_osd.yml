@@ -27,6 +27,7 @@
     path: '{{ context }}'
     pull: False
     state: present
-    archive_path: '{{ context }}/{{ archive_name }}.tar'
+    archive_path: '{{ pull_path }}/{{ osd_archive_name }}.tar'
     buildargs:
       ceph_service_git_tag: '{{ git_tag }}'
+      ceph_tools_git_tag: '{{ ceph_tools_git_tag }}'

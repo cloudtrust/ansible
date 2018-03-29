@@ -42,6 +42,18 @@
   include_tasks: deploy_osd.yml
   tags: deploy, osd
 
+# Provisioner
+
+- name: Deploy rbd provisioner
+  include_tasks: deploy_provisioner.yml
+  tags: deploy, provisioner
+
+# Storageclass
+
+- name: Deploy storageclass
+  include_tasks: deploy_storageclass.yml
+  tags: deploy, storageclass, sc
+
 # Cleanup
 
 - name: Clean pulled directories
