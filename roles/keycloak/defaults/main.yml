@@ -1,5 +1,6 @@
 dockerfile: 'cloudtrust-keycloak.dockerfile'
-config_env: ''
+git_repo: 'git@github.com:cloudtrust/keycloak-service.git'
+
 image_name: 'cloudtrust-keycloak:{{ config_repo_name }}-{{ config_git_tag }}'
 
 archive_name: keycloak

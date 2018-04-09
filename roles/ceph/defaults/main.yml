@@ -1,5 +1,7 @@
 #Global
 
+git_repo: git@github.com:cloudtrust/ceph-service.git
+
 base_name: ceph
 mon_archive_name: mon
 osd_archive_name: osd

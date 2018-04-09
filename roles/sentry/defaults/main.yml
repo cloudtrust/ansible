@@ -1,4 +1,6 @@
 base_name: sentry
+git_repo: git@github.com:cloudtrust/sentry-service.git
+
 
 
 dockerfile: cloudtrust-sentry.dockerfile
