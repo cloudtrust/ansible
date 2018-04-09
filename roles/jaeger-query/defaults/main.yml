@@ -1,0 +1,20 @@
+archive_name: jaeger-query
+git_repo: git@github.com:cloudtrust/jaeger-query.git
+
+remote_path: /var/cloudtrust/jaeger-query
+
+dockerfile: 'cloudtrust-jaeger-query.dockerfile'
+image_name: 'cloudtrust-jaeger-query:{{ config_repo_name }}-{{ config_git_tag }}'
+
+pull_path: '{{ role_path }}/jaeger-query'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+
+base_name: jaeger-query
+
+certs_path: '{{ role_path }}/files'
+tls_crt: '{{ certs_path }}/tls.crt'
+tls_key: '{{ certs_path }}/tls.key'
+tls_secret_name: jaeger-tls
+
+

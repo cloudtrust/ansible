@@ -30,4 +30,4 @@
       config_git_tag: '{{ config_branch }}'
       config_repo: '{{ config_repo}}'
       influx_service_git_tag: '{{ git_tag }}'
-      influx_tools_git_tag: '{{ tools_git_tag }}'
+      influx_tools_git_tag: '{{ influx_tools_git_tag }}'

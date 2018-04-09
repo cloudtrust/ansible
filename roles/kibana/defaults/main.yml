@@ -12,3 +12,7 @@ image_name: 'cloudtrust-kibana:{{ config_name }}-{{ config_git_tag }}'
 
 remote_path: /cloudtrust/elasticsearch
 
+tls_secret_name: kibana-tls
+tls_crt: tls.crt
+tls_key: tls.key
+server_name: ct-int-kibana.dev.elca.ch

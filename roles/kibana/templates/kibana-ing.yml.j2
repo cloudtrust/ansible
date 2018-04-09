@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kibana
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - {{ server_name }}
+    secretName: {{ tls_secret_name }}
+  rules:
+  - host: {{ server_name }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kibana
+          servicePort: http

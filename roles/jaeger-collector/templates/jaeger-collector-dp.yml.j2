@@ -1,28 +1,30 @@
-apiVersion: apps/v1
-kind: StatefulSet
+---
+
+apiVersion: apps/v1beta1
+kind: Deployment
 metadata:
-  name: kibana
+  name: jaeger-collector
 spec:
-  podManagementPolicy: Parallel
-  serviceName: kibana
-  replicas: {{ replicas }}
-  selector:
-    matchLabels:
-      app: kibana
   template:
     metadata:
       annotations:
         seccomp.security.alpha.kubernetes.io/pod: docker/default
       labels:
-        app: kibana
+        app: jaeger-collector
     spec:
       containers:
       - image: {{ image_name }}
         imagePullPolicy: Never
-        name: elasticsearch
+        name: jaeger-collector
         ports:
-        - containerPort: 80
-          name: http
+          - containerPort: 14269
+            name: health
+          - containerPort: 14268
+            name: http
+          - containerPort: 14267
+            name: jaeger
+          - containerPort: 9411
+            name: zipkin
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -31,9 +33,6 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
-        - name: config
-          mountPath: /etc/elasticsearch/elasticsearch.yml
-          subPath: elasticsearch.yml
       volumes:
       - name: run
         emptyDir:
@@ -44,6 +43,3 @@ spec:
       - name: cgroups
         hostPath:
           path: /sys/fs/cgroup
-      - name: config
-        configMap:
-          name: elasticsearch-client

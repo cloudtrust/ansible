@@ -1,0 +1,14 @@
+archive_name: flaki
+git_repo: git@github.com:cloudtrust/flaki-service.git
+
+remote_path: /var/cloudtrust/flaki
+
+dockerfile: 'cloudtrust-flaki.dockerfile'
+image_name: 'cloudtrust-flaki:{{ config_repo_name }}-{{ config_git_tag }}'
+
+pull_path: '{{ role_path }}/flaki'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+
+base_name: flaki
+

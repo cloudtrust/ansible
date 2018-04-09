@@ -26,6 +26,11 @@
     src: '{{ keys_path }}/'
     dest: '{{ context }}/keys/'
 
+- name: Copy known hosts file to build context
+  copy:
+    src: '{{ known_hosts_file }}'
+    dest: '{{ context }}/keys/'
+
 - name: Build the image and export as tar
   docker_image:
     name: '{{ image_name }}'

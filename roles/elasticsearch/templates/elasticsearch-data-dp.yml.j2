@@ -53,9 +53,15 @@ spec:
       - name: cgroups
         hostPath:
           path: /sys/fs/cgroup
-      - name: data
-        emptyDir:
-          medium: ""
       - name: config
         configMap:
           name: elasticsearch-data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "rbd"
+      resources:
+        requests:
+          storage: 2Gi

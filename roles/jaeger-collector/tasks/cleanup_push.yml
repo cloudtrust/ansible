@@ -1,0 +1,6 @@
+---
+
+- name: Cleanup push path
+  file:
+    path: '{{ remote_path }}'
+    state: absent

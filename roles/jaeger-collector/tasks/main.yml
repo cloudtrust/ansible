@@ -1,4 +1,5 @@
 ---
+
 - name: Build image locally
   include_tasks: build.yml
   tags: build

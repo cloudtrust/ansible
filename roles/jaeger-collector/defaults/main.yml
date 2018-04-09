@@ -1,0 +1,14 @@
+archive_name: jaeger-collector
+git_repo: git@github.com:cloudtrust/jaeger-collector.git
+
+remote_path: /cloudtrust/jaeger-collector
+
+dockerfile: 'cloudtrust-jaeger-collector.dockerfile'
+image_name: 'cloudtrust-jaeger-collector:{{ config_repo_name }}-{{ config_git_tag }}'
+
+pull_path: '{{ role_path }}/jaeger-collector'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+
+base_name: jaeger-collector
+

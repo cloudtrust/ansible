@@ -3,15 +3,11 @@ kind: Service
 metadata:
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-  name: elasticsearch-data
+  name: kibana
 spec:
   ports:
-  - port: 9200
+  - port: 80
     targetPort: http
     name: http
-  - port: 9300
-    targetPort: transport
-    name: transport
   selector:
-    app: elasticsearch
-    role: data
+    app: kibana

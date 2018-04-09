@@ -32,8 +32,27 @@
     src: kibana-svc.yml.j2
     dest: "{{ remote_path }}/kibana-svc.yml"
 
-- name: Create configmap
+- name: Deploy client tls keys
+  template:
+    src: kibana-tls.yml.j2
+    dest: "{{ remote_path }}/kibana-tls.yml"
+
+- name: Deploy client ingress
+  template:
+    src: kibana-ing.yml.j2
+    dest: "{{ remote_path }}/kibana-ing.yml"
+
+
+- name: Create svc
   shell: kubectl replace --force -f {{ remote_path }}/kibana-svc.yml
+  run_once: true
+
+- name: Create tls
+  shell: kubectl replace --force -f {{ remote_path }}/kibana-tls.yml
+  run_once: true
+
+- name: Create 
+  shell: kubectl replace --force -f {{ remote_path }}/kibana-ing.yml
   run_once: true
 
 - name: Create configmap

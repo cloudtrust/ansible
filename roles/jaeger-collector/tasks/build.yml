@@ -1,10 +1,4 @@
 ---
-
-- name: Make sure that the pull directory exists
-  file:
-    path: '{{ pull_path }}'
-    state: directory
-
 - name: Pull repository
   git:
     repo: '{{ git_repo }}'
@@ -18,18 +12,20 @@
 
 - name: Copy dockerfile to build context
   copy:
-    src: '{{ osd_dockerfile }}'
+    src: '{{ dockerfile_path }}/{{ dockerfile }}'
     dest: '{{ context }}/Dockerfile'
 
 - name: Build the image
   docker_image:
-    name: '{{ osd_image_name }}'
+    name: '{{ image_name }}'
     path: '{{ context }}'
     pull: False
-    force: yes
     nocache: "{{ force | default('no') }}"
+    force: yes
     state: present
-    archive_path: '{{ pull_path }}/{{ osd_archive_name }}.tar'
+    archive_path: '{{ context }}/{{ archive_name }}.tar'
     buildargs:
-      ceph_service_git_tag: '{{ git_tag }}'
-      ceph_tools_git_tag: '{{ ceph_tools_git_tag }}'
+      jaeger_collector_git_tag: '{{ git_tag }}'
+      jaeger_release: '{{ jaeger_release }}'
+      config_git_tag: '{{ config_git_tag }}'
+      config_repo: '{{ config_repo }}'

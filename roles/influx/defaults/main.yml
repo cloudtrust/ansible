@@ -1,4 +1,5 @@
 archive_name: image
+git_repo: git@github.com:cloudtrust/influx-service.git
 
 config_env: ""
 
