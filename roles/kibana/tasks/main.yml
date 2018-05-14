@@ -12,6 +12,20 @@
     value: '262144'
   tags: always
 
-- name: Deploy kibana
+- name: Push to remote
+  include_tasks: push.yml
+  tags: push
+
+- name: Deploy kibana to cluster
   include_tasks: deploy.yml
   tags: deploy
+  
+- name: Cleanup local pull dirs
+  include_tasks: cleanup_pull.yml
+  run_once: true
+  tags: cleanup_pull, cleanup
+  delegate_to: 127.0.0.1
+
+- name: Cleanup push dirs
+  include_tasks: cleanup_push.yml
+  tags: cleanup_push, cleanup

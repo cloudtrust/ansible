@@ -1,6 +1,7 @@
 dockerfile: cloudtrust-baseimage.dockerfile
+git_repo: 'git@github.com:cloudtrust/baseimage.git'
 
-pull_path: '{{ role_path }}/baseimage'
+pull_path: '{{ playbook_dir }}/pull/baseimage'
 
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'

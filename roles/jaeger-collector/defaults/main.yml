@@ -6,7 +6,7 @@ remote_path: /cloudtrust/jaeger-collector
 dockerfile: 'cloudtrust-jaeger-collector.dockerfile'
 image_name: 'cloudtrust-jaeger-collector:{{ config_repo_name }}-{{ config_git_tag }}'
 
-pull_path: '{{ role_path }}/jaeger-collector'
+pull_path: '{{ playbook_dir }}/pull/jaeger-collector'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 

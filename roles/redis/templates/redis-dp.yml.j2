@@ -18,8 +18,8 @@ spec:
         imagePullPolicy: Never
         name: redis
         ports:
-          - containerPort: 9600
-            name: http
+          - containerPort: 6379
+            name: redis
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -28,6 +28,12 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
       volumes:
       - name: run
         emptyDir:

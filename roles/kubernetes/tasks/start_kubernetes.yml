@@ -5,9 +5,11 @@
     enabled: yes
     name: kubelet
     state: restarted
+    daemon-reload: yes
 
 - name: Startup kube-proxy
   systemd:
     enabled: yes
     name: kube-proxy
     state: restarted
+    daemon-reload: yes

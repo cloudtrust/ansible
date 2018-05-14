@@ -3,6 +3,15 @@
   include_tasks: kubelet.yml
   tags: kubelet, deploy
 
+- name: Master Certificates
+  include_tasks: master-certificates.yml
+  when: inventory_hostname in groups['kube-master']
+  tags: certificates, deploy
+
+- name: Certificates
+  include_tasks: certificates.yml
+  tags: certificates, deploy
+
 - name: Apiserver
   include_tasks: apiserver.yml
   when: inventory_hostname in groups['kube-master']

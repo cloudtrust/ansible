@@ -14,7 +14,7 @@
   file:
     path: "{{ remote_path }}"
     state: directory
-  tags: deploy, common
+  tags: push, deploy, common
 
 - name: Deploy namespace template
   include_tasks: deploy_namespace.yml
@@ -27,6 +27,10 @@
   run_once: true
   tags: build, mon
 
+- name: Push ceph monitor 
+  include_tasks: push_mon.yml
+  tags: push, mon
+
 - name: Deploy ceph monitor 
   include_tasks: deploy_mon.yml
   tags: deploy, mon
@@ -37,6 +41,10 @@
   delegate_to: 127.0.0.1
   run_once: true
   tags: build, osd
+
+- name: Push ceph osd 
+  include_tasks: push_osd.yml
+  tags: push, osd
 
 - name: Deploy ceph osd 
   include_tasks: deploy_osd.yml
@@ -56,9 +64,12 @@
 
 # Cleanup
 
-- name: Clean pulled directories
-  file:
-    path: '{{ pull_path }}'
-    state: 'absent'
-  tags: cleanup
+- name: Cleanup local pull dirs
+  include_tasks: cleanup_pull.yml
+  run_once: true
+  tags: cleanup_pull, cleanup
+  delegate_to: 127.0.0.1
 
+- name: Cleanup push dirs
+  include_tasks: cleanup_push.yml
+  tags: cleanup_push, cleanup

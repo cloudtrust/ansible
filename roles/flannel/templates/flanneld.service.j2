@@ -6,7 +6,7 @@ Description=flannel is an etcd backed overlay network for containers
 [Service]
 Type=notify
 EnvironmentFile={{ flannel_config_dir }}/flanneld
-ExecStart=/usr/bin/flanneld --etcd-endpoints=${FLANNEL_ETCD} --etcd-prefix=${FLANNEL_ETCD_KEY} --iface={{ interface }} $FLANNEL_OPTIONS
+ExecStart=/usr/bin/flanneld
 Restart=always
 
 [Install]

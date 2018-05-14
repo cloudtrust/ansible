@@ -1,34 +1,22 @@
 ---
-- name: Make sure directories exist
-  file:
-    path: '{{ remote_path }}'
-    state: directory
-    directory_mode: yes
-  tags: deploy
-
-- name: Push image to remote
-  copy:
-    src: '{{ context }}/{{ archive_name }}.tar'
-    dest: '{{ remote_path }}/{{ archive_name }}.tar'
-    directory_mode: yes
-  tags: deploy
-
-- name: Import docker tar image
-  docker_image:
-    name: '{{ image_name }}'
-    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
-    state: present
-    force: yes
-
 - name: Copy the postgresql deployment template
   template:
     src: postgresql-dp.yml.j2
     dest: "{{ remote_path }}/postgresql-dp.yml"
 
+- name: Copy the postgresql headless service template
+  template:
+    src: postgresql-headless-svc.yml.j2
+    dest: "{{ remote_path }}/postgresql-headless-svc.yml"
+
 - name: Copy the postgresql service template
   template:
     src: postgresql-svc.yml.j2
     dest: "{{ remote_path }}/postgresql-svc.yml"
+
+- name: Deploy postgresql headless service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/postgresql-headless-svc.yml
+  run_once: true
 
 - name: Deploy postgresql service
   shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/postgresql-svc.yml

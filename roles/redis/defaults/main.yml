@@ -11,7 +11,7 @@ config_repo: git@github.com:cloudtrust/dev-config.git
 dockerfile: 'cloudtrust-redis.dockerfile'
 image_name: 'cloudtrust-redis:{{ config_repo_name }}-{{config_git_tag }}'
 
-pull_path: '{{ role_path }}/redis'
+pull_path: '{{ playbook_dir }}/pull/redis'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 replicas: 1

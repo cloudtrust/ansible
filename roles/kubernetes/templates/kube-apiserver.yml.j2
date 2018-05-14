@@ -25,6 +25,12 @@ spec:
     - name: srvkube
       mountPath: "{{ srv_kube_path }}"
       readOnly: true
+    - name: etcd-certs
+      mountPath: "{{ kube_etcd_certs_dir }}"
+      readOnly: true
+    - name: kube-certs
+      mountPath: "{{ kube_certs_dir }}"
+      readOnly: true
     livenessProbe:
       httpGet:
         scheme: HTTP
@@ -37,6 +43,12 @@ spec:
   - name: srvkube
     hostPath:
       path: "{{ srv_kube_path }}"
+  - name: etcd-certs
+    hostPath:
+      path: "{{ etcd_certs_dir }}"
+  - name: kube-certs
+    hostPath:
+      path: "{{ kube_certs_dir }}"
   securityContext:
     seLinuxOptions:
       type: "spc_t"

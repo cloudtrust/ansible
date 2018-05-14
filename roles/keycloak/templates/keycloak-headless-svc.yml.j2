@@ -3,9 +3,17 @@ kind: Service
 metadata:
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-  name: keycloak
+  name: keycloak-headless
 spec:
   ports:
+  - port: 8888
+    protocol: TCP
+    targetPort: http-bridge
+    name: http-bridge
+  - port: 5555
+    protocol: TCP
+    targetPort: grpc
+    name: grpc
   - port: 80
     protocol: TCP
     targetPort: http

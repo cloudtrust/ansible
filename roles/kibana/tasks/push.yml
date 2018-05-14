@@ -1,0 +1,18 @@
+---
+
+- name: Create remote directory
+  file:
+    path: "{{ remote_path }}"
+    state: directory
+
+- name: Deploy the kibana image
+  copy:
+    src: '{{ pull_path }}/{{ archive_name }}.tar'
+    dest: '{{ remote_path }}/{{ archive_name }}.tar'
+    
+- name: Import docker tar image
+  docker_image:
+    name: '{{ image_name }}'
+    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
+    state: present
+    force: yes

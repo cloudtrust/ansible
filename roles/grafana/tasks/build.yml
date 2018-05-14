@@ -23,9 +23,8 @@
     nocache: "{{ force | default('no') }}"
     force: yes
     state: present
-    archive_path: '{{ context }}/{{ archive_name }}.tar'
+    archive_path: '{{ pull_path }}/{{ archive_name }}.tar'
     buildargs:
-      config_env: '{{ config_env }}'
-      config_git_tag: '{{ config_branch }}'
+      config_git_tag: '{{ config_git_tag }}'
       config_repo: '{{ config_repo }}'
       grafana_service_git_tag: '{{ git_tag }}'

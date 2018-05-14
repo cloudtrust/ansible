@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ base_name }}
+  name: postgresql
 spec:
   ports:
   - port: 5432
@@ -10,4 +10,4 @@ spec:
     name: postgresql
   type: ClusterIP
   selector:
-    app: {{ base_name }}
+    app: postgresql

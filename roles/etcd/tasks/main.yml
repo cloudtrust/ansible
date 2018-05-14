@@ -1,9 +1,12 @@
-# filename: roles/configure/etcd/tasks/main.yml
 ---
 
 - name: Install etcd
   include: install.yml
   tags: install, deploy
+
+- name: Push certificates
+  include: certificates.yml
+  tags: certs, deploy
 
 - name: Configure etcd
   include: configure.yml

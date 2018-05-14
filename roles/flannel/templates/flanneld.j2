@@ -1,8 +1,14 @@
 # Flanneld configuration options
 
 # etcd url location.  Point this to the server where etcd runs
-FLANNEL_ETCD="{% for node in groups['etcd'] %}http://{{ hostvars[node]['ansible_' + interface]['ipv4']['address'] }}:{{ etcd_client_port }}{% if not loop.last %},{% endif %}{% endfor %}"
-FLANNEL_ETCD_KEY="/{{ cluster_name }}/network"
+FLANNELD_ETCD="{{ etcd_servers }}"
+FLANNELD_ETCD_KEY="/{{ cluster_name }}/network"
+FLANNELD_IFACE="{{ interface }}"
 
-FLANNEL_ETCD_ENDPOINTS="{% for node in groups['etcd'] %}http://{{ hostvars[node]['ansible_' + interface]['ipv4']['address'] }}:{{ etcd_client_port }}{% if not loop.last %},{% endif %}{% endfor %}"
-FLANNEL_ETCD_PREFIX="/{{ cluster_name }}/network"
+FLANNELD_ETCD_ENDPOINTS="{{ etcd_servers }}"
+FLANNELD_ETCD_PREFIX="/{{ cluster_name }}/network"
+
+FLANNELD_ETCD_CAFILE="{{ etcd_certs_dir }}/{{ etcd_ca_file }}"
+FLANNELD_ETCD_CERTFILE="{{ etcd_certs_dir }}/{{ etcd_client_cert_file }}"
+FLANNELD_ETCD_KEYFILE="{{ etcd_certs_dir }}/{{ etcd_client_key_file }}"
+

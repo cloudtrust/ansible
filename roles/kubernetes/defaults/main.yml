@@ -6,16 +6,23 @@ kubeproxy_service_file: /etc/systemd/system/kube-proxy.service
 apiserver_port: '8080'
 apiserver_port_https: '8443'
 master_address: "https://{{ master_ip }}:{{ apiserver_port_https }}"
+dns_server: "{{ cluster_dns }}"
 
 addons_namespace: kube-addons
-dns_server: "{{ kube_service_ip | ipaddr('net') | ipaddr(10) | ipaddr('address') }}"
 dns_replicas: 1
 
-master_cert: 'server.crt'
-master_key: 'server.key'
-ca_key: 'ca.key'
-ca_cert: 'ca.crt'
+kube_certs_dir: '/etc/ssl/kubernetes'
+kube_server_cert_file: 'kube_server.crt'
+kube_server_key_file: 'kube_server.key'
+kube_ca_key_file: 'kube_ca.key'
+kube_ca_cert_file: 'kube_ca.crt'
+kube_client_ca_cert_file: 'kube_client_ca.crt'
+kube_client_admin_cert_file: 'kube_client_admin.crt'
+kube_client_admin_key_file: 'kube_client_admin.key'
 service_account_key_file: 'service-account-key-file.key'
+
+kube_etcd_certs_dir: '/etc/ssl/etcd'
+
 
 token: '2f236c1c-9844-41e4-8a82-005aab690136'
 token_file: tokens
@@ -29,16 +36,13 @@ kubelet_opts: [
     { flag: '--address', value: '0.0.0.0'},
     { flag: '--port', value: '10250'},
     { flag: '--pod-manifest-path', value: '{{ manifests_path }}'},
-    { flag: '--hostname-override', value: "{{ hostvars[inventory_hostname]['ansible_' + interface]['ipv4']['address'] }}" },
+    { flag: '--hostname-override', value: "{{ master_ip }}" },
     { flag: '--docker-disable-shared-pid', value: 'true'},
     { flag: '--cluster-dns', value: '{{ dns_server }}'},
     { flag: '--cluster-domain', value: '{{ cluster_name }}' },
     { flag: '--fail-swap-on', value: 'false' },
+    { flag: '--client-ca-file', value: '{{ kube_certs_dir }}/{{ kube_client_ca_cert_file }}' },
   ]
-
-#    { flag: '--anonymous-auth', value: 'false'},
-#    { flag: '--authentication-token-webhook' }, 
-
 
 apiserver_opts: [
     { flag: '--logtostderr', value: 'true'},
@@ -49,13 +53,18 @@ apiserver_opts: [
     { flag: '--secure-port', value: '{{ apiserver_port_https }}'},
     { flag: '--service_cluster_ip_range', value: '{{ kube_service_ip }}'},
     { flag: '--etcd_servers', value: '{{ etcd_servers }}'},
+    { flag: '--etcd-cafile', value: '{{ kube_etcd_certs_dir }}/{{ etcd_ca_file }}'},
+    { flag: '--etcd-certfile', value: '{{ kube_etcd_certs_dir }}/{{ etcd_client_cert_file }}'},
+    { flag: '--etcd-keyfile', value: '{{ kube_etcd_certs_dir }}/{{ etcd_client_key_file }}'},
     { flag: '--token-auth-file', value: '{{ srv_kube_path }}/{{ token_file }}'},
-    { flag: '--tls-cert-file', value: '{{ srv_kube_path }}/{{ master_cert }}'},
-    { flag: '--tls-private-key-file', value: '{{ srv_kube_path }}/{{ master_key }}'},
+    { flag: '--tls-cert-file', value: '{{ kube_certs_dir }}/{{ kube_server_cert_file }}'},
+    { flag: '--tls-private-key-file', value: '{{ kube_certs_dir }}/{{ kube_server_key_file }}'},
     { flag: '--service-account-key-file', value: '{{ srv_kube_path }}/{{ service_account_key_file }}' },
     { flag: '--endpoint-reconciler-type', value: 'lease' },
     { flag: '--admission-control', value: 'NamespaceLifecycle,ServiceAccount,DefaultStorageClass,ResourceQuota' },
-    { flag: '--allow-privileged', value: 'true' }
+    { flag: '--kubelet-client-certificate', value: '{{ kube_certs_dir }}/{{ kube_client_admin_cert_file }}'},
+    { flag: '--kubelet-client-key', value: '{{ kube_certs_dir }}/{{ kube_client_admin_key_file }}'},
+    { flag: '--allow-privileged', value: 'true' },
   ]
 
 controller_manager_port: '10252'
@@ -65,7 +74,7 @@ controller_manager_opts: [
     { flag: '--master', value: 'http://127.0.0.1:{{ apiserver_port }}'},
     { flag: '--cluster-cidr', value: '{{ flannel_subnet }}/{{ flannel_prefix }}'},
     { flag: '--leader-elect' },
-    { flag: '--root-ca-file', value: '{{ srv_kube_path }}/{{ ca_cert }}' },
+    { flag: '--root-ca-file', value: '{{ kube_certs_dir }}/{{ kube_ca_cert_file }}' },
     { flag: '--service-account-private-key-file', value: '{{ srv_kube_path }}/{{ service_account_key_file }}' },
 
   ]

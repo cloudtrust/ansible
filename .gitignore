@@ -1,3 +1,6 @@
+int-vars.yml
+debug.yml
+pull
 config
 inventories
 roles/sentry/vars/main.yml
@@ -59,3 +62,18 @@ roles/jaeger-query/files/tls.key
 roles/kibana/files/tls.crt
 roles/kibana/files/tls.key
 roles/logstash/templates/elasticsearch.conf.j2
+roles/kubernetes/files/certs/kube_client_ca.key
+roles/kubernetes/files/certs/gen_certs.sh
+roles/kubernetes/files/certs/kube_client_ca.srl
+roles/kubernetes/files/certs/kube_ca.crt
+roles/kubernetes/files/certs/kube_client_admin.csr
+roles/kubernetes/files/certs/server.csr
+roles/kubernetes/files/certs/kube_ca.key
+roles/kubernetes/files/certs/kube_server_csr.conf
+roles/kubernetes/files/certs/kube_client_admin.key
+roles/kubernetes/files/certs/kube_client_csr.conf
+roles/kubernetes/files/certs/kube_server.key
+roles/kubernetes/files/certs/kube_server.crt
+roles/kubernetes/files/certs/kube_client_ca.crt
+roles/kubernetes/files/certs/kube_client_admin.crt
+roles/kubernetes/files/service-account-key-file.key

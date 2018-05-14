@@ -1,17 +1,5 @@
 ---
 
-- name: Push image to remote
-  copy:
-    src: '{{ pull_path }}/{{ osd_archive_name }}.tar'
-    dest: '{{ remote_path }}/{{ osd_archive_name }}.tar'
-
-- name: Import docker tar image
-  docker_image:
-    name: '{{ osd_image_name }}'
-    load_path: '{{ remote_path }}/{{ osd_archive_name }}.tar'
-    state: present
-    force: yes
-
 - name: Osd data directory
   file:
     path: /var/lib/ceph/osd

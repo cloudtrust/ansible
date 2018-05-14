@@ -43,6 +43,12 @@ spec:
         - name: config
           mountPath: /etc/elasticsearch/elasticsearch.yml
           subPath: elasticsearch.yml
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
       volumes:
       - name: run
         emptyDir:

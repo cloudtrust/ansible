@@ -8,12 +8,12 @@ osd_archive_name: osd
 namespace: ceph
 
 remote_path: '/var/cloudtrust/{{ base_name }}'
-pull_path: '{{ role_path }}/pull/{{ base_name }}'
+pull_path: '{{ playbook_dir }}/pull/{{ base_name }}'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 
 #Monitor
-mon_image_name: 'cloudtrust-ceph-mon:{{ git_tag }}'
+mon_image_name: 'cloudtrust-ceph-mon:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
 mon_dockerfile: '{{ dockerfile_path }}/cloudtrust-ceph-mon.dockerfile'
 mon_secret_name: mon-secret
 mon_replicas: 2
@@ -21,7 +21,7 @@ mon_replicas: 2
 mon_data_dir: mon-data
 
 #OSD
-osd_image_name: 'cloudtrust-ceph-osd:{{ git_tag }}'
+osd_image_name: 'cloudtrust-ceph-osd:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
 osd_dockerfile: '{{ dockerfile_path }}/cloudtrust-ceph-osd.dockerfile'
 osd_secret_name: osd-secret
 

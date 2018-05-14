@@ -7,7 +7,7 @@
   delegate_to: 127.0.0.1
 
 - name: Cleanup local pull dirs
-  include_tasks: cleanup_pull.yml
+  include_tasks: cleanup.yml
   run_once: true
-  tags: cleanup_dir, cleanup
+  tags: cleanup
   delegate_to: 127.0.0.1

@@ -23,10 +23,16 @@ spec:
       initialDelaySeconds: 15
       timeoutSeconds: 15
     volumeMounts:
+    - name: kube-certs
+      mountPath: "{{ kube_certs_dir }}"
+      readOnly: true
     - name: srvkube
       mountPath: "{{ srv_kube_path }}"
       readOnly: true
   volumes:
+  - name: kube-certs
+    hostPath:
+      path: "{{ kube_certs_dir }}"
   - name: srvkube
     hostPath:
       path: "{{ srv_kube_path }}"

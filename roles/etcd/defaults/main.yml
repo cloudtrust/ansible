@@ -1,7 +1,6 @@
 ---
 etcd_peer_port: 2380
-etcd_url_scheme: http
-etcd_peer_url_scheme: http
+etcd_scheme: https
 
 etcd_peers_group: etcd
 
@@ -12,13 +11,16 @@ etcd_service_dir: /etc/systemd/system
 etcd_initial_cluster_state: new
 etcd_initial_cluster_token: etcd-k8-cluster
 
-etcd_machine_address: "{{ hostvars[inventory_hostname]['ansible_' + interface].ipv4.address }}"
-
-etcd_initial_advertise_peer_urls: "{{ etcd_peer_url_scheme }}://{{ etcd_machine_address }}:{{ etcd_peer_port }}"
-etcd_listen_peer_urls: "{{ etcd_peer_url_scheme }}://0.0.0.0:{{ etcd_peer_port }}"
-etcd_advertise_client_urls: "{{ etcd_url_scheme }}://{{ etcd_machine_address }}:{{ etcd_client_port }}"
-etcd_listen_client_urls: "{{ etcd_url_scheme }}://0.0.0.0:{{ etcd_client_port }}"
+etcd_initial_advertise_peer_urls: "{{ etcd_scheme }}://{{ ansible_fqdn }}:{{ etcd_peer_port }}"
+etcd_listen_peer_urls: "{{ etcd_scheme }}://0.0.0.0:{{ etcd_peer_port }}"
+etcd_advertise_client_urls: "{{ etcd_scheme }}://{{ ansible_fqdn }}:{{ etcd_client_port }}"
+etcd_listen_client_urls: "{{ etcd_scheme }}://0.0.0.0:{{ etcd_client_port }}"
 
 etcd_data_dir: /var/lib/etcd
 
 etcd_enable: true
+
+etcd_peer_cert_file: etcd_peer.crt
+etcd_peer_key_file: etcd_peer.key
+etcd_server_cert_file: etcd_server.crt
+etcd_server_key_file: etcd_server.key

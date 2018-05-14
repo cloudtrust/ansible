@@ -17,7 +17,7 @@ spec:
         imagePullPolicy: Never
         name: jaeger-collector
         ports:
-          - containerPort: 14269
+          - containerPort: 14260
             name: health
           - containerPort: 14268
             name: http
@@ -33,6 +33,12 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /
+            port: health
+          initialDelaySeconds: 15
+          periodSeconds: 3
       volumes:
       - name: run
         emptyDir:

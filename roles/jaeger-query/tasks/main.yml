@@ -6,15 +6,20 @@
   run_once: true
   delegate_to: 127.0.0.1
 
-- name: Export tar image and send to remote
+- name: Push image to remote
+  include_tasks: push.yml
+  tags: push
+
+- name: Deploy to cluster
   include_tasks: deploy.yml
   tags: deploy
 
 - name: Cleanup local pull dirs
   include_tasks: cleanup_pull.yml
-  tags: cleanup_dir, cleanup
+  run_once: true
+  tags: cleanup_pull, cleanup
   delegate_to: 127.0.0.1
 
-- name: Cleanup remote push dirs
+- name: Cleanup push dirs
   include_tasks: cleanup_push.yml
-  tags: cleanup_dir, cleanup
+  tags: cleanup_push, cleanup

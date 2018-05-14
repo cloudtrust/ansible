@@ -32,6 +32,12 @@ spec:
           mountPath: /var/lib/logstash
         - name: config
           mountPath: /etc/logstash/conf.d
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
       volumes:
       - name: run
         emptyDir:

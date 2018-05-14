@@ -7,9 +7,7 @@ dockerfile: cloudtrust-sentry.dockerfile
 image_name: 'cloudtrust-sentry:{{ config_repo_name }}-{{ config_git_tag }}'
 archive_name: image
 
-config_env: ""
-
-pull_path: '{{ role_path }}/sentry'
+pull_path: '{{ playbook_dir }}/pull/sentry'
 remote_path: /cloudtrust/sentry
 
 dockerfile_path: '{{ pull_path }}/dockerfiles'

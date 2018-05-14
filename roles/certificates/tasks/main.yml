@@ -1,11 +1,4 @@
 ---
-- name: Generate Certificates
-  include_tasks: generate-certificates.yml
-  delegate_to: 127.0.0.1
-  with_items: "{{ groups['kube-master'] }}"
-  when: dynamic_certs
-  tags: certificates, build
-
 - name: Master Certificates
   include_tasks: master-certificates.yml
   when: inventory_hostname in groups['kube-master']

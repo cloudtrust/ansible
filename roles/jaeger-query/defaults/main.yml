@@ -6,7 +6,7 @@ remote_path: /var/cloudtrust/jaeger-query
 dockerfile: 'cloudtrust-jaeger-query.dockerfile'
 image_name: 'cloudtrust-jaeger-query:{{ config_repo_name }}-{{ config_git_tag }}'
 
-pull_path: '{{ role_path }}/jaeger-query'
+pull_path: '{{ playbook_dir }}/pull/jaeger-query'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 

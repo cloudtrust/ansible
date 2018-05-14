@@ -4,7 +4,7 @@ metadata:
   name: {{ base_name }}
 spec:
   podManagementPolicy: Parallel
-  serviceName: {{ base_name }}
+  serviceName: keycloak-headless
   replicas: {{ replicas }}
   selector:
     matchLabels:
@@ -22,9 +22,11 @@ spec:
         name: {{ base_name }}
         args:
           - "/sbin/init"
-          - "--log-level=debug"
-          - "--log-target=journal"
         ports:
+          - containerPort: 8888
+            name: http-bridge
+          - containerPort: 5555
+            name: grpc
           - containerPort: 80
             name: http
         volumeMounts:

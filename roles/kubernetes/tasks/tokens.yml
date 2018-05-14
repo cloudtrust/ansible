@@ -1,5 +1,13 @@
 ---
 
+- name: Create kubernetes srv dir
+  file:
+    path: "{{ srv_kube_path }}"
+    state: directory
+    mode: 0740
+    owner: etcd
+    group: etcd
+
 - name: Copy token files
   template:
     src: "tokens.j2"

@@ -1,5 +1,10 @@
 dynamic_certs: True
-master_cert: 'server.crt'
-master_key: 'server.key'
-ca_key: 'ca.key'
-ca_cert: 'ca.crt'
+
+
+kube_master_cert: 'apiserver.crt'
+kube_master_key: 'apiserver.key'
+kube_ca_key: 'ca.key'
+kube_ca_cert: 'ca.crt'
+
+kube_client_ca: 'client_ca.crt'
+kube_client_cert: 'client_ca.key'

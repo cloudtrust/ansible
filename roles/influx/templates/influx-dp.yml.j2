@@ -27,6 +27,12 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
       volumes:
       - name: run
         emptyDir:
