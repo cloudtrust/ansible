@@ -5,19 +5,6 @@
     state: directory
     directory_mode: yes
 
-- name: Push image to remote
-  copy:
-    src: '{{ context }}/{{ archive_name }}.tar'
-    dest: '{{ remote_path }}/{{ archive_name }}.tar'
-    directory_mode: yes
-
-- name: Import docker tar image
-  docker_image:
-    name: '{{ image_name }}'
-    load_path: '{{ remote_path }}/{{ archive_name }}.tar'
-    state: present
-    force: yes
-
 - name: Copy the service template file
   template:
     src: flaki-svc.yml.j2

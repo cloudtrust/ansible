@@ -26,3 +26,7 @@
     archive_path: '{{ pull_path }}/{{ archive_name }}.tar'
     buildargs:
       elasticsearch_service_git_tag: '{{ git_tag }}'
+      elasticsearch_bridge_release: '{{ elasticsearch_bridge_release }}'
+      jaeger_release: '{{ jaeger_release }}'
+      config_git_tag: '{{ config_git_tag }}'
+      config_repo: '{{ config_repo }}'

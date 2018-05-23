@@ -63,14 +63,6 @@
       debug: msg={{ deployed_files.stdout_lines }}
       tags: deploy
     
-    - name: Print .gitignore
-      lineinfile:
-        path: '{{ playbook_dir }}/.gitignore'
-        line: '{{ item }}'
-        state: present
-      with_items: '{{ deployed_files.stdout_lines }}'
-      tags: deploy
-    
     - name: Clean config
       shell: for i in $(find {{ playbook_dir }}/config/deployable -type f); do rm -f {{ playbook_dir }}/${i#{{ playbook_dir }}/config/deployable/}; done
       tags: cleanup

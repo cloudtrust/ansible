@@ -77,3 +77,4 @@ roles/kubernetes/files/certs/kube_server.crt
 roles/kubernetes/files/certs/kube_client_ca.crt
 roles/kubernetes/files/certs/kube_client_admin.crt
 roles/kubernetes/files/service-account-key-file.key
+roles/elasticsearch/vars/main.yml
