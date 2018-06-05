@@ -6,8 +6,11 @@
     state: stopped
 
 - name: Clean docker config
-  file:
-    path: '{{ item.root/item.path }}'
-    state: absent
-  with_filetree:
-    - '/var/lib/docker/'
+  command: rm -rf /var/lib/docker/*
+
+- name: Restart docker
+  systemd:
+    name: docker
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

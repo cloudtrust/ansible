@@ -1,11 +1,15 @@
 ---
 
 - name: Install required packages
-  include_tasks: packages.yml
+  import_tasks: packages.yml
+  tags: deploy
+
+- name: Open up internal traffic
+  import_tasks: firewalld.yml
   tags: deploy
 
 - name: Install docker
-  include_tasks: docker_install.yml
+  import_tasks: docker_install.yml
   tags: deploy
 
 - name: Set that selinux boolean

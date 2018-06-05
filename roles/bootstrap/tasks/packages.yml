@@ -6,5 +6,5 @@
     - libselinux-python
     - libsemanage-python
     - python-docker-py
-    - python-firewall
+    - python3-firewall
     - ntpdate
