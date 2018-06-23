@@ -13,8 +13,8 @@ context: '{{ pull_path }}/build_context'
 base_name: jaeger-query
 
 certs_path: '{{ role_path }}/files'
-tls_crt: '{{ certs_path }}/tls.crt'
-tls_key: '{{ certs_path }}/tls.key'
+tls_crt: '{{ certs_path }}/jaeger.crt'
+tls_key: '{{ certs_path }}/jaeger.key'
 tls_secret_name: jaeger-tls
 
 

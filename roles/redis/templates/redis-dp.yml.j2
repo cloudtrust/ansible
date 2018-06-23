@@ -29,9 +29,8 @@ spec:
           mountPath: /sys/fs/cgroup
           readOnly: true
         readinessProbe:
-          httpGet:
-            path: /
-            port: http
+          tcpSocket:
+            port: redis
           initialDelaySeconds: 15
           periodSeconds: 3
       volumes:

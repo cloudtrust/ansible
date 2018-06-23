@@ -20,6 +20,7 @@
     name: '{{ image_name }}'
     path: '{{ context }}'
     nocache: "{{ force | default('no') }}"
+    timeout: 1000
     force: yes
     pull: False
     state: present
@@ -31,5 +32,7 @@
       jaeger_release: '{{ jaeger_release }}'
       wsfed_release: '{{ wsfed_release }}'
       keycloak_export_release: '{{ keycloak_export_release }}'
+      keycloak_authorization_release: '{{ keycloak_authorization_release }}'
+      keycloak_release: '{{ keycloak_release }}'
       config_git_tag: '{{ config_git_tag }}'
       config_repo: '{{ config_repo }}'

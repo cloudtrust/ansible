@@ -1,10 +1,12 @@
 ---
 
 apiVersion: apps/v1beta1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ base_name }}
 spec:
+  podManagementPolicy: Parallel
+  serviceName: {{ base_name }}
   template:
     metadata:
       annotations:
@@ -24,6 +26,8 @@ spec:
           mountPath: /tmp
         - name: run
           mountPath: /run
+        - name: data
+          mountPath: /var/lib/influxdb
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
@@ -43,3 +47,12 @@ spec:
       - name: cgroups
         hostPath:
           path: /sys/fs/cgroup
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "rbd"
+      resources:
+        requests:
+          storage: 2Gi

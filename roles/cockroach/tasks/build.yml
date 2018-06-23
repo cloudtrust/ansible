@@ -1,0 +1,32 @@
+---
+- name: Pull repository
+  git:
+    repo: '{{ git_repo }}'
+    dest: '{{ pull_path }}'
+    version: '{{ git_tag }}'
+
+- name: Create build context
+  file:
+    path: '{{ context }}'
+    state: directory
+
+- name: Copy dockerfile to build context
+  copy:
+    src: '{{ dockerfile_path }}/{{ dockerfile }}'
+    dest: '{{ context }}/Dockerfile'
+
+- name: Build the image
+  docker_image:
+    name: '{{ image_name }}'
+    path: '{{ context }}'
+    nocache: "{{ force | default('no') }}"
+    timeout: 1000
+    force: yes
+    pull: False
+    state: present
+    archive_path: '{{ context }}/{{ archive_name }}.tar'
+    buildargs:
+      cockroach_service_git_tag: '{{ git_tag }}'
+      cockroach_release: '{{ cockroach_release }}'
+      config_git_tag: '{{ config_git_tag }}'
+      config_repo: '{{ config_repo }}'

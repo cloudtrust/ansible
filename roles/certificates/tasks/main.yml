@@ -1,10 +1,10 @@
 ---
-- name: Master Certificates
-  include_tasks: master-certificates.yml
-  when: inventory_hostname in groups['kube-master']
-  tags: certificates, deploy
+- name: Pull pki
+  import_tasks: build.yml
+  run_once: true
+  delegate_to: 127.0.0.1
+  tags: ca, build
 
-
-- name: Certificates
-  include_tasks: certificates.yml
-  tags: certificates, deploy
+- name: Deploy pki
+  import_tasks: deploy.yml
+  tags: ca, deploy

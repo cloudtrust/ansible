@@ -24,9 +24,7 @@
     owner: root
     group: root
   with_items:
-    - "{{ kube_ca_cert_file }}"
     - "{{ kube_server_cert_file }}"
     - "{{ kube_server_key_file }}"
     - "{{ kube_client_admin_cert_file }}"
     - "{{ kube_client_admin_key_file }}"
-    - "{{ kube_client_ca_cert_file }}"

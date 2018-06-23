@@ -1,3 +1,0 @@
----
-- name: Install etcd via package manager
-  shell: dnf install -y etcd

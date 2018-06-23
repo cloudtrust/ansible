@@ -28,6 +28,9 @@ spec:
     - name: etcd-certs
       mountPath: "{{ kube_etcd_certs_dir }}"
       readOnly: true
+    - name: pki
+      mountPath: "{{ kube_pki_dir }}"
+      readOnly: true
     - name: kube-certs
       mountPath: "{{ kube_certs_dir }}"
       readOnly: true
@@ -45,10 +48,13 @@ spec:
       path: "{{ srv_kube_path }}"
   - name: etcd-certs
     hostPath:
-      path: "{{ etcd_certs_dir }}"
+      path: "{{ etcd_ssl }}"
   - name: kube-certs
     hostPath:
       path: "{{ kube_certs_dir }}"
+  - name: pki
+    hostPath:
+      path: "{{ pki_path }}"
   securityContext:
     seLinuxOptions:
       type: "spc_t"

@@ -1,0 +1,6 @@
+---
+
+- name: Remove temporary directory
+  file:
+    path: '{{ pull_path }}'
+    state: absent

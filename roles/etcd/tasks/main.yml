@@ -1,21 +1,19 @@
 ---
 
-- name: Install etcd
-  include: install.yml
-  tags: install, deploy
+- name: Build the container
+  import_tasks: build.yml
+  delegate_to: 127.0.0.1
+  run_once: true
+  tags: build
 
-- name: Push certificates
-  include: certificates.yml
-  tags: certs, deploy
+- name: Push and import on remote
+  import_tasks: push.yml
+  tags: push
 
-- name: Configure etcd
-  include: configure.yml
-  tags: configure, deploy
+#- name: Open firewall
+  #import_tasks: firewalld.yml
+  #tags: deploy
 
-- name: Configure firewalld etcd rules
-  include: firewalld.yml
-  tags: configure, deploy
-
-- name: Restart etcd
-  include: restart.yml
-  tags: restart, deploy
+- name: Deploy configs and start service
+  import_tasks: deploy.yml
+  tags: deploy

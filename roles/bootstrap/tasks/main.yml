@@ -8,9 +8,9 @@
   import_tasks: firewalld.yml
   tags: deploy
 
-- name: Install docker
-  import_tasks: docker_install.yml
-  tags: deploy
+#- name: Install docker
+  #import_tasks: docker_install.yml
+  #tags: deploy
 
 - name: Set that selinux boolean
   seboolean:

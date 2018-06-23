@@ -53,16 +53,24 @@
       tags: deploy
 
     - name: Generate .gitignore file for current deployment
-      shell: echo -e "config\ninventories"; find . -type f | sed 's:\./::'
+      shell: echo -e "config\ninventories\npull\nvenv"; find . -type f | sed 's:\./::'
       args:
         chdir: '{{ playbook_dir }}/config/deployable'
       register: deployed_files
       tags: deploy
     
     - name: Output deployed_files
-      debug: msg={{ deployed_files.stdout_lines }}
+      debug: msg={{ deployed_files.stdout }}
       tags: deploy
     
+    - name: Write gitignore
+      lineinfile:
+        line: "{{ item }}"
+        dest: "{{ playbook_dir }}/.gitignore"
+      with_items:
+        - "{{ deployed_files.stdout_lines }}"
+      tags: deploy
+
     - name: Clean config
       shell: for i in $(find {{ playbook_dir }}/config/deployable -type f); do rm -f {{ playbook_dir }}/${i#{{ playbook_dir }}/config/deployable/}; done
       tags: cleanup

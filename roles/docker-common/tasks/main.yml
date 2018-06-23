@@ -1,15 +1,15 @@
 ---
 
 - name: Pull docker-common
-  include_tasks: build.yml
+  import_tasks: build.yml
   tags: build
   delegate_to: 127.0.0.1
 
 - name: Install docker-common
-  include_tasks: deploy.yml
+  import_tasks: deploy.yml
   tags: deploy
 
 - name: Cleanup docker-common
-  include_tasks: cleanup.yml
+  import_tasks: cleanup.yml
   tags: cleanup
   delegate_to: 127.0.0.1

@@ -8,7 +8,7 @@ FLANNELD_IFACE="{{ interface }}"
 FLANNELD_ETCD_ENDPOINTS="{{ etcd_servers }}"
 FLANNELD_ETCD_PREFIX="/{{ cluster_name }}/network"
 
-FLANNELD_ETCD_CAFILE="{{ etcd_certs_dir }}/{{ etcd_ca_file }}"
-FLANNELD_ETCD_CERTFILE="{{ etcd_certs_dir }}/{{ etcd_client_cert_file }}"
-FLANNELD_ETCD_KEYFILE="{{ etcd_certs_dir }}/{{ etcd_client_key_file }}"
+FLANNELD_ETCD_CAFILE="{{ ca_cert }}"
+FLANNELD_ETCD_CERTFILE="{{ etcd_client_cert }}"
+FLANNELD_ETCD_KEYFILE="{{ etcd_client_key }}"
 

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ client["name"] }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ client["name"] }}
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: {{ client.name }}
+    spec:
+      containers:
+      - image: {{ image_name }}
+        imagePullPolicy: Never
+        name: idp-client
+        ports:
+        - containerPort: {{ client.port }}
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: config
+          mountPath: /opt/idp-test-client-run/fediz_config.xml
+          subPath: fediz_config.xml 
+          readOnly: true
+        - name: config
+          mountPath: /opt/idp-test-client-run/application.properties
+          subPath: application.properties
+          readOnly: true
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: config
+        configMap:
+          name: {{ client["name"] }}

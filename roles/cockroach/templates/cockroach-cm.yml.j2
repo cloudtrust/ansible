@@ -1,0 +1,11 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cockroach
+data:
+  cockroach.service: |
+    {{ lookup('template', role_path + '/templates/cockroach.service.j2') | indent(4,False) }}
+
+

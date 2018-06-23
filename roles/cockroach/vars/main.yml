@@ -1,0 +1,7 @@
+git_tag: initial
+
+cockroach_release: https://binaries.cockroachdb.com/cockroach-v2.0.2.linux-amd64.tgz
+
+image_name: "cloudtrust-cockroach:2.0.2"
+
+server_name: 'dev-cockroach.cloudtrust.io'

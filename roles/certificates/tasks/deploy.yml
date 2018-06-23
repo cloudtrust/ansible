@@ -1,0 +1,21 @@
+---
+
+- name: Create pki storage space
+  file:
+    path: "{{ pki_path }}"
+    state: directory
+    mode: 0755
+
+- name: Copy ca certficiate to node
+  copy:
+    src: "{{ pull_path }}/{{ ca_cert_file }}"
+    dest: "{{ ca_cert }}"
+    mode: 0644
+
+- name: Copy ca certificate to node ca store
+  copy:
+    src: "{{ pull_path }}/{{ ca_cert_file }}"
+    dest: /etc/pki/ca-trust/source/anchors/
+
+- name: Update system CA
+  command: update-ca-trust

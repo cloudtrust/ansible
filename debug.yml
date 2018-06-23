@@ -1,0 +1,7 @@
+---
+
+- name: Deploy the cloudtrust base-image
+  hosts: 127.0.0.1
+  tasks:
+      - name: Print vars
+        debug: msg="{{ master_ip }}"

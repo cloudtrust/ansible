@@ -38,8 +38,13 @@ spec:
           mountPath: /sys/fs/cgroup
           readOnly: true
         - name: config
+          mountPath: {{ jks_path }}
+          subPath: cacerts
+          readOnly: yes
+        - name: config
           mountPath: /opt/keycloak/keycloak/standalone/configuration/standalone.xml
           subPath: standalone.xml
+          readOnly: yes
         readinessProbe:
           httpGet:
             path: /auth

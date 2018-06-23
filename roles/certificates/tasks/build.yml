@@ -1,0 +1,7 @@
+---
+
+- name: Pull pki repo
+  git:
+    repo: "{{ git_repo }}"
+    dest: "{{ pull_path }}"
+    version: "{{ git_tag }}"

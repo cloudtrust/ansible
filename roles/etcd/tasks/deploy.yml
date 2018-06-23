@@ -1,0 +1,77 @@
+---
+
+- name: create etcd files path
+  file:
+    path: "{{ etcd_srv }}"
+    state: directory
+    mode: 0775
+
+- name: create etcd ssl files path
+  file:
+    path: "{{ etcd_srv_ssl }}"
+    state: directory
+    mode: 0775
+
+- name: Deploy ssl certificates
+  copy:
+    src: "{{ item }}"
+    dest: "{{ etcd_srv_ssl }}"
+    mode: 0775
+  when: etcd_scheme == "https"
+  with_fileglob:
+    - "{{ role_path }}/files/*.crt"
+    - "{{ role_path }}/files/*.key"
+
+- name: Deploy etcd configuration
+  template:
+    src: "etcd.conf.j2"
+    dest: "{{ etcd_srv }}/etcd.conf"
+    mode: 0664
+
+- name: Create container
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ image_name }}"
+    recreate: yes
+    state: present
+    restart_policy: no
+    network_mode: host
+    tmpfs:
+      - "/run"
+      - "/tmp"
+    volumes:
+      - "{{ etcd_srv_ssl }}:{{ etcd_ssl }}:ro,z"
+      - "{{ etcd_srv_conf }}:{{ etcd_conf}}:ro,z"
+      - "{{ etcd_srv_data }}:{{ etcd_data }}:rw,z"
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+
+- name: Deploy service file
+  template:
+    src: cloudtrust-etcd.service.j2
+    dest: /etc/systemd/system/cloudtrust-etcd.service
+
+- name: Start service
+  systemd:
+    daemon_reload: yes
+    name: cloudtrust-etcd
+    enabled: yes
+    state: restarted
+
+- name: Wait for etcd
+  uri:
+    url: "{{ etcd_scheme }}://localhost:{{etcd_client_port}}/version"
+    validate_certs: no
+  register: result
+  until: result.status == 200
+  retries: 10
+  delay: 30
+
+- name: Create keys
+  etcd:
+    state: present
+    host: 127.0.0.1
+    port: 2379
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_dict: "{{ etcd_key_vals }}"
+  when: init_etcd == "yes"

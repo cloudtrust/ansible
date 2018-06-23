@@ -23,6 +23,9 @@ spec:
       initialDelaySeconds: 15
       timeoutSeconds: 15
     volumeMounts:
+    - name: pki
+      mountPath: "{{ kube_pki_dir }}"
+      readOnly: true
     - name: kube-certs
       mountPath: "{{ kube_certs_dir }}"
       readOnly: true
@@ -30,6 +33,9 @@ spec:
       mountPath: "{{ srv_kube_path }}"
       readOnly: true
   volumes:
+  - name: pki
+    hostPath:
+      path: "{{ pki_path }}"
   - name: kube-certs
     hostPath:
       path: "{{ kube_certs_dir }}"

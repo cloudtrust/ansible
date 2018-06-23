@@ -1,8 +1,0 @@
-# filename: roles/configure/etcd/hanlders/main.yml
----
-
-- name: restart firewalld
-  service:
-    name: firewalld
-    state: restarted
-    daemon_reload: yes

@@ -17,4 +17,5 @@
     name: '{{ image_name }}'
     load_path: '{{ remote_path }}/{{ archive_name }}.tar'
     state: present
+    timeout: 300
     force: yes

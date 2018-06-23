@@ -14,12 +14,14 @@ base_name: 'keycloak'
 remote_path: '/var/cloudtrust/keycloak'
 
 certs_path: '{{ role_path }}/files'
-tls_crt: '{{ certs_path }}/tls.crt'
-tls_key: '{{ certs_path }}/tls.key'
+tls_crt: '{{ certs_path }}/keycloak.crt'
+tls_key: '{{ certs_path }}/keycloak.key'
 tls_secret_name: keycloak-tls
 
 replicas: 2
 
 jgroups_tcp_port: 7800
 jgroups_initial_hosts: "{% for i in range(replicas) %}keycloak-{{ i }}.keycloak-headless.default.svc.{{ cluster_name }}[{{ jgroups_tcp_port }}]{% if not loop.last %},{% endif %}{% endfor %}"
+
+jks_path: "/opt/keycloak/keycloak/cacerts"
  

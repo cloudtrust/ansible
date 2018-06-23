@@ -1,0 +1,9 @@
+---
+
+- name: Build the container
+  import_tasks: build.yml
+  tags: deploy
+
+- name: Deploy configs and start service
+  import_tasks: deploy.yml
+  tags: deploy

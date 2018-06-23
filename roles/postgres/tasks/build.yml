@@ -20,6 +20,7 @@
     name: '{{ image_name }}'
     path: '{{ context }}'
     nocache: "{{ force | default('no') }}"
+    timeout: 600
     force: yes
     pull: False
     state: present

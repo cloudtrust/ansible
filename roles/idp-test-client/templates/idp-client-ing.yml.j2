@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ client.name }}
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - {{ client.route }}
+    secretName: {{ tls_secret_name }}
+  rules:
+  - host: {{ client["route"] }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ client["name"] }}
+          servicePort: http

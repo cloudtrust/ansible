@@ -1,0 +1,7 @@
+---
+
+- name: Deploy the cloudtrust base-image
+  hosts: etcd
+  roles:
+    - etcd-host
+  tags: etcd

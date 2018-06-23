@@ -14,6 +14,6 @@ dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
 
 certs_path: '{{ role_path }}/files'
-tls_crt: '{{ certs_path }}/tls.crt'
-tls_key: '{{ certs_path }}/tls.key'
+tls_crt: '{{ certs_path }}/sentry.crt'
+tls_key: '{{ certs_path }}/sentry.key'
 tls_secret_name: sentry-tls

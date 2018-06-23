@@ -7,7 +7,7 @@
 
 - name: Push image to remote
   copy:
-    src: '{{ context }}/{{ archive_name }}.tar'
+    src: '{{ pull_path }}/{{ archive_name }}.tar'
     dest: '{{ remote_path }}/{{ archive_name }}.tar'
     directory_mode: yes
 

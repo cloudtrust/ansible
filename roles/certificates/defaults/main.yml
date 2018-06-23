@@ -1,10 +1,1 @@
-dynamic_certs: True
-
-
-kube_master_cert: 'apiserver.crt'
-kube_master_key: 'apiserver.key'
-kube_ca_key: 'ca.key'
-kube_ca_cert: 'ca.crt'
-
-kube_client_ca: 'client_ca.crt'
-kube_client_cert: 'client_ca.key'
+pull_path: '{{ playbook_dir }}/pull/pki/'

@@ -1,0 +1,7 @@
+---
+
+- name: Deploy idp-test-client
+  hosts: all
+  roles:
+    - idp-test-client
+  tags: idp-test-client

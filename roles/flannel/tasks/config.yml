@@ -6,12 +6,8 @@
 
 - name: Set facts about etcdctl command
   set_fact:
-    peers: "{{ etcd_servers }}"
     conf_file: "/tmp/flannel-conf.json"
     conf_loc: "/{{ cluster_name }}/network/config"
-    ca_file: "{{ etcd_certs_dir }}/{{ etcd_ca_file }}"
-    cert_file: "{{ etcd_certs_dir }}/{{ etcd_client_cert_file }}"
-    key_file: "{{ etcd_certs_dir }}/{{ etcd_client_key_file }}"
   run_once: true
   delegate_to: "{{ groups['etcd'][0] }}"
 
@@ -21,7 +17,7 @@
   delegate_to: "{{ groups['etcd'][0] }}"
 
 - name: Load the flannel config file into etcd
-  shell: "/usr/bin/etcdctl --ca-file={{ ca_file }} --cert-file={{ cert_file }} --key-file={{ key_file }} --no-sync --peers={{ peers }} set {{ conf_loc }} < {{ conf_file }}"
+  shell: "/usr/bin/etcdctl --ca-file={{ ca_cert }} --cert-file={{ etcd_client_cert }} --key-file={{ etcd_client_key }} --no-sync --peers={{ etcd_servers }} set {{ conf_loc }} < {{ conf_file }}"
   run_once: true
   delegate_to: "{{ groups['etcd'][0] }}"
 

@@ -1,0 +1,3 @@
+git_tag: initial
+
+etcd_initial_cluster_token: kube-etcd

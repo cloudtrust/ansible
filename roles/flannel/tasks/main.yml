@@ -1,17 +1,13 @@
 ---
 - name: Prepare and write Flannel configuration to etcd
-  include_tasks: config.yml
+  import_tasks: config.yml
 
 - name: Install Flannel
-  include_tasks: client.yml
-
-- name: Add firewall rules
-  include: firewalld.yml
-  notify:
-    - restart firewalld
+  import_tasks: client.yml
 
 - name: Enable flannel
-  service: name=flanneld enabled=yes
-
-- name: (Re)Start flannel
-  service: name=flanneld state=restarted
+  systemd:
+    name: flanneld
+    enabled: yes
+    state: restarted
+    daemon_reload: yes
