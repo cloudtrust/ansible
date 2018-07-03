@@ -1,0 +1,20 @@
+---
+
+- name: Deploy client deployment
+  template:
+    src: idp-client-dp.yml.j2
+    dest: "{{ remote_path }}/shadowgroup-dp.yml"
+
+- name: Deploy client configmap
+  template:
+    src: idp-client-svc.yml.j2
+    dest: "{{ remote_path }}/shadowgroup-svc.yml"
+
+- name: Create svc
+  shell: kubectl replace --force -f {{ remote_path }}/shadowgroup-svc.yml
+  run_once: true
+
+- name: Create deployment
+  shell: kubectl replace --force -f {{ remote_path }}/shadowgroup-dp.yml
+  run_once: true
+

@@ -1,0 +1,4 @@
+config_repo: ssh://git@git.elcanet.local:7999/cloudtrust/dev-config.git
+config_repo_name: dev
+config_git_tag: master
+

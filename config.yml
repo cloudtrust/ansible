@@ -62,6 +62,15 @@
     - name: Output deployed_files
       debug: msg={{ deployed_files.stdout }}
       tags: deploy
+
+    - name: Write gitignore
+      lineinfile:
+        line: "{{ item }}"
+        dest: "{{ playbook_dir }}/.gitignore"
+      with_items:
+        - "{{ deployed_files.stdout_lines }}"
+      tags: deploy
+
     
     - name: Write gitignore
       lineinfile:
