@@ -34,6 +34,14 @@ spec:
           mountPath: /opt/idp-test-client-run/application.properties
           subPath: application.properties
           readOnly: true
+        - name: config
+          mountPath: /opt/idp-test-client-run/localstore.jks
+          subPath: localstore.jks
+          readOnly: true
+        - name: config
+          mountPath: /opt/idp-test-client-run/localstore-SAML.jks
+          subPath: localstore-SAML.jks
+          readOnly: true
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
