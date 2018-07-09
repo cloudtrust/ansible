@@ -18,7 +18,7 @@ tls_crt: '{{ certs_path }}/keycloak.crt'
 tls_key: '{{ certs_path }}/keycloak.key'
 tls_secret_name: keycloak-tls
 
-replicas: 2
+replicas: 1
 
 jgroups_tcp_port: 7800
 jgroups_initial_hosts: "{% for i in range(replicas) %}keycloak-{{ i }}.keycloak-headless.default.svc.{{ cluster_name }}[{{ jgroups_tcp_port }}]{% if not loop.last %},{% endif %}{% endfor %}"

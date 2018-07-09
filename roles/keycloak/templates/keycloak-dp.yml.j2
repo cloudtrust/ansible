@@ -38,6 +38,10 @@ spec:
           mountPath: /sys/fs/cgroup
           readOnly: true
         - name: config
+          mountPath: /etc/krb5.keytab
+          subPath: krb5.keytab
+          readOnly: yes
+        - name: config
           mountPath: {{ jks_path }}
           subPath: cacerts
           readOnly: yes
