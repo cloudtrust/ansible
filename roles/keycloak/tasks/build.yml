@@ -33,6 +33,7 @@
       wsfed_release: '{{ wsfed_release }}'
       keycloak_export_release: '{{ keycloak_export_release }}'
       keycloak_authorization_release: '{{ keycloak_authorization_release }}'
+      keycloak_client_mappers_release: '{{ keycloak_client_mappers_release }}'
       keycloak_release: '{{ keycloak_release }}'
       config_git_tag: '{{ config_git_tag }}'
       config_repo: '{{ config_repo }}'
