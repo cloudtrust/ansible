@@ -2,12 +2,12 @@
 
 - name: Deploy client deployment
   template:
-    src: idp-client-dp.yml.j2
+    src: shadowgroup-dp.yml.j2
     dest: "{{ remote_path }}/shadowgroup-dp.yml"
 
 - name: Deploy client configmap
   template:
-    src: idp-client-svc.yml.j2
+    src: shadowgroup-svc.yml.j2
     dest: "{{ remote_path }}/shadowgroup-svc.yml"
 
 - name: Create svc
