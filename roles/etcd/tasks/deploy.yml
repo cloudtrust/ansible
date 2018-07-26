@@ -73,5 +73,6 @@
     port: 2379
     key: "{{ item.key }}"
     value: "{{ item.value }}"
+    override: true
   with_dict: "{{ etcd_key_vals }}"
   when: init_etcd == "yes"
