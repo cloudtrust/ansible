@@ -862,7 +862,7 @@ forward-zone:
 	forward-tls-upstream: no
 forward-zone:
 	name: "."
-	forward-addr: 192.168.16.100
+	forward-addr: {{ local_dns }}
 
 # Authority zones
 # The data for these zones is kept locally, from a file or downloaded.
