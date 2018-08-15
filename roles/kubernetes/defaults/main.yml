@@ -32,7 +32,7 @@ kubelet_opts: [
     { flag: '--cgroup-driver', value: 'systemd' },
     { flag: '--kubeconfig', value: '/etc/kubernetes/admin.kubeconfig'},
     { flag: '--allow-privileged', value: 'true' },
-    { flag: '--address', value: '0.0.0.0'},
+    { flag: '--address', value: '{{ address }}'},
     { flag: '--port', value: '10250'},
     { flag: '--pod-manifest-path', value: '{{ manifests_path }}'},
     { flag: '--hostname-override', value: "{{ master_ip }}" },
@@ -46,7 +46,7 @@ kubelet_opts: [
 apiserver_opts: [
     { flag: '--logtostderr', value: 'true'},
     { flag: '--v', value: '0'},
-    { flag: '--bind-address', value: '0.0.0.0'},
+    { flag: '--bind-address', value: '{{ address }}'},
     { flag: '--secure-port', value: '{{ apiserver_port_https }}'},
     { flag: '--service-cluster-ip-range', value: '{{ kube_service_ip }}'},
     { flag: '--etcd-servers', value: '{{ etcd_servers }}'},

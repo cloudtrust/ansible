@@ -16,6 +16,7 @@
 
 - name: Cleanup local pull dirs
   import_tasks: cleanup_pull.yml
+  run_once: true
   tags: cleanup_dir, cleanup
   delegate_to: 127.0.0.1
 
