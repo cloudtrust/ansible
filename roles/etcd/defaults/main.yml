@@ -9,8 +9,7 @@ dockerfile: cloudtrust-etcd.dockerfile
 pull_path: '{{ playbook_dir }}/pull/etcd'
 dockerfile_path: '{{ pull_path }}/dockerfiles'
 context: '{{ pull_path }}/build_context'
-#image_name: 'cloudtrust-etcd:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
-image_name: 'cloudtrust-etcd:latest'
+image_name: 'cloudtrust-etcd:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
 
 remote_path: /cloudtrust/etcd
 
