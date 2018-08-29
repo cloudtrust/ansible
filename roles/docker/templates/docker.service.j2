@@ -1,9 +1,9 @@
 [Unit]
 Description=Docker Application Container Engine
 Documentation=http://docs.docker.com
-After=network.target docker-containerd.service flannel.service
+After=network.target docker-containerd.service flanneld.service
 Wants=docker-storage-setup.service
-Requires=docker-containerd.service
+Requires=docker-containerd.service flanneld.service
 
 [Service]
 Type=notify
@@ -16,7 +16,7 @@ Environment="HTTPS_PROXY={{ docker_https_proxy }}"
 EnvironmentFile=-/etc/sysconfig/docker
 EnvironmentFile=-/etc/sysconfig/docker-storage
 EnvironmentFile=-/etc/sysconfig/docker-network
-EnvironmentFile=-/run/flannel/subnet.env
+EnvironmentFile=/run/flannel/subnet.env
 Environment=GOTRACEBACK=crash
 Environment=DOCKER_HTTP_HOST_COMPAT=1
 ExecStart=/usr/bin/dockerd-current \
