@@ -10,7 +10,6 @@ inventories
 pull
 venv
 modules
-library
 *-vars.yml
 roles/unbound/files/
 roles/nginx/files/
@@ -209,3 +208,8 @@ roles/etcd-host/files/etcd_client_tls.conf
 roles/etcd-host/files/ca.srl
 roles/etcd-host/files/etcd_ca_tls.conf
 roles/resolver/vars/main.yml
+roles/keycloak/files/krb5.keytab.b64
+roles/keycloak/files/krb5.keytab
+roles/baseimage/keys/README.md
+roles/baseimage/keys/id_ssh.pub
+roles/baseimage/keys/id_ssh
