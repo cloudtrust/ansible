@@ -1,0 +1,13 @@
+# filename: roles/configure/etcd/tasks/configure.yml
+---
+
+- name: Create etcd service directory
+  file:
+    path: "{{ etcd_service_dir }}"
+    state: directory
+
+- name: Write etcd config file
+  template: src=etcd.conf.j2 dest=/etc/etcd/etcd.conf
+
+- name: Enable etcd
+  service: name=etcd enabled=yes

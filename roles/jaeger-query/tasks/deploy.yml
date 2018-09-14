@@ -1,0 +1,37 @@
+---
+
+- name: Copy the service template file
+  template:
+    src: jaeger-query-svc.yml.j2
+    dest: "{{ remote_path }}/jaeger-query-svc.yml"
+
+- name: Copy the ingress template file
+  template:
+    src: jaeger-query-tls.yml.j2
+    dest: "{{ remote_path }}/jaeger-query-tls.yml"
+
+- name: Copy the ingress template file
+  template:
+    src: jaeger-query-ing.yml.j2
+    dest: "{{ remote_path }}/jaeger-query-ing.yml"
+
+- name: Copy the deployment template file
+  template:
+    src: jaeger-query-dp.yml.j2
+    dest: "{{ remote_path }}/jaeger-query-dp.yml"
+
+- name: Deploy jaeger-query service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/jaeger-query-svc.yml
+  run_once: true
+
+- name: Deploy jaeger-query certificate secret
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/jaeger-query-tls.yml
+  run_once: true
+
+- name: Deploy jaeger-query ingress
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/jaeger-query-ing.yml
+  run_once: true
+
+- name: Deploy jaeger-query deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/jaeger-query-dp.yml
+  run_once: true

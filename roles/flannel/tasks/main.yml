@@ -1,0 +1,13 @@
+---
+- name: Prepare and write Flannel configuration to etcd
+  import_tasks: config.yml
+
+- name: Install Flannel
+  import_tasks: client.yml
+
+- name: Enable flannel
+  systemd:
+    name: flanneld
+    enabled: yes
+    state: restarted
+    daemon_reload: yes

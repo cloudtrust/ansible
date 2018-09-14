@@ -1,0 +1,19 @@
+---
+- name: Deploy provisioner service account template
+  template:
+    src: rbd-provisioner-sa.yml.j2
+    dest: "{{ remote_path }}/rbd-provisioner-sa.yml"
+
+- name: Deploy provisioner deployment template
+  template:
+    src: rbd-provisioner-dp.yml.j2
+    dest: "{{ remote_path }}/rbd-provisioner-dp.yml"
+
+- name: Create service account
+  shell: kubectl replace --force -f {{ remote_path }}/rbd-provisioner-sa.yml
+  run_once: true
+
+- name: Create provisioner deployment
+  shell: kubectl replace --force -f {{ remote_path }}/rbd-provisioner-dp.yml
+  run_once: true
+

@@ -1,0 +1,19 @@
+---
+
+- name: Copy the service template file
+  template:
+    src: jaeger-collector-svc.yml.j2
+    dest: "{{ remote_path }}/jaeger-collector-svc.yml"
+
+- name: Copy the deployment template file
+  template:
+    src: jaeger-collector-dp.yml.j2
+    dest: "{{ remote_path }}/jaeger-collector-dp.yml"
+
+- name: Deploy jaeger-collector service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/jaeger-collector-svc.yml
+  run_once: true
+
+- name: Deploy jaeger-collector deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/jaeger-collector-dp.yml
+  run_once: true

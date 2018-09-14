@@ -1,0 +1,7 @@
+---
+
+- name: Deploy kibana
+  hosts: all
+  roles:
+    - kibana
+  tags: kibana

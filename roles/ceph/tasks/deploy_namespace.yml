@@ -1,0 +1,10 @@
+---
+
+- name: Deploy namespace template
+  template:
+    src: namespace.yml.j2
+    dest: "{{ remote_path }}/namespace.yml"
+
+- name: Create ceph namespace
+  shell: kubectl replace --force -f "{{ remote_path }}/namespace.yml"
+  run_once: true

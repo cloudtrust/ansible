@@ -1,0 +1,1 @@
+pull_path: '{{ playbook_dir }}/pull/pki/'

@@ -1,0 +1,25 @@
+---
+
+git_repo: git@github.com:cloudtrust/nginx-service.git
+
+archive_name: nginx.tar
+
+dockerfile: cloudtrust-nginx.dockerfile
+
+pull_path: '{{ playbook_dir }}/pull/nginx'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+image_name: 'cloudtrust-nginx:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
+
+remote_path: /cloudtrust/nginx
+
+container_name: nginx
+
+nginx_srv: /srv/nginx
+nginx_srv_aux_conf: /srv/nginx/conf.d
+nginx_srv_main_conf: /srv/nginx/nginx.conf
+nginx_srv_data: /srv/nginx/www
+
+nginx_main_conf: /etc/nginx/nginx.conf
+nginx_aux_conf: /etc/nginx/conf.d
+nginx_data: /var/www/

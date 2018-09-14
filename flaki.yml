@@ -1,0 +1,6 @@
+---
+- name: Deploy the cloudtrust base-image
+  hosts: all
+  roles:
+    - flaki
+  tags: flaki

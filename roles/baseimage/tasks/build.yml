@@ -1,0 +1,45 @@
+---
+
+- name: Pull repository
+  git:
+    repo: '{{ git_repo }}'
+    dest: '{{ pull_path }}'
+    version: '{{ git_tag }}'
+
+- name: Create build context
+  file:
+    path: '{{ context }}'
+    state: directory
+
+- name: Copy dockerfile to build context
+  copy:
+    src: '{{ dockerfile_path }}/{{ dockerfile }}'
+    dest: '{{ context }}/Dockerfile'
+
+- name: Create keys in context
+  file:
+    path: '{{ context }}/keys'
+    state: directory
+
+- name: Copy keys to build context
+  copy:
+    src: '{{ keys_path }}/'
+    dest: '{{ context }}/keys/'
+
+- name: Copy known hosts file to build context
+  copy:
+    src: '{{ known_hosts_file }}'
+    dest: '{{ context }}/keys/'
+
+- name: Build the image and export as tar
+  docker_image:
+    name: '{{ image_name }}'
+    path: '{{ context }}'
+    archive_path: '{{ context }}/{{ image_name }}.tar'
+    nocache: "{{ force | default('no') }}"
+    force: yes
+    state: present
+    buildargs:
+      baseimage_git_tag: '{{ git_tag }}'
+      ssh_key_name: '{{ ssh_key_name }}'
+      known_hosts_file: '{{ known_hosts_file }}'

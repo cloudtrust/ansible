@@ -1,0 +1,75 @@
+---
+
+- name: Create and generate ceph keys
+  import_tasks: create_keys.yml
+  delegate_to: 127.0.0.1
+  when: dynamic_keys
+  tags: create_keys, build
+
+- name: Install Ceph on the nodes
+  shell: dnf -y install ceph
+  tags: deploy, common
+
+- name: Create remote directory
+  file:
+    path: "{{ remote_path }}"
+    state: directory
+  tags: push, deploy, common
+
+- name: Deploy namespace template
+  import_tasks: deploy_namespace.yml
+  tags: deploy, common
+
+# Monitor
+- name: Build the docker monitor image
+  import_tasks: build_mon.yml
+  delegate_to: 127.0.0.1
+  run_once: true
+  tags: build, mon
+
+- name: Push ceph monitor 
+  import_tasks: push_mon.yml
+  tags: push, mon
+
+- name: Deploy ceph monitor 
+  import_tasks: deploy_mon.yml
+  tags: deploy, mon
+
+# OSD
+- name: Build the docker osd image
+  import_tasks: build_osd.yml
+  delegate_to: 127.0.0.1
+  run_once: true
+  tags: build, osd
+
+- name: Push ceph osd 
+  import_tasks: push_osd.yml
+  tags: push, osd
+
+- name: Deploy ceph osd 
+  import_tasks: deploy_osd.yml
+  tags: deploy, osd
+
+# Provisioner
+
+- name: Deploy rbd provisioner
+  import_tasks: deploy_provisioner.yml
+  tags: deploy, provisioner
+
+# Storageclass
+
+- name: Deploy storageclass
+  import_tasks: deploy_storageclass.yml
+  tags: deploy, storageclass, sc
+
+# Cleanup
+
+- name: Cleanup local pull dirs
+  import_tasks: cleanup_pull.yml
+  run_once: true
+  tags: cleanup_pull, cleanup
+  delegate_to: 127.0.0.1
+
+- name: Cleanup push dirs
+  import_tasks: cleanup_push.yml
+  tags: cleanup_push, cleanup

@@ -1,0 +1,20 @@
+dockerfile: 'cloudtrust-cockroach.dockerfile'
+git_repo: 'git@github.com:cloudtrust/cockroach-service.git'
+
+image_name: 'cloudtrust-cockroach:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
+
+archive_name: cockroach
+
+pull_path: '{{ playbook_dir }}/pull/cockroach'
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+
+remote_path: '/var/cloudtrust/cockroach'
+
+replicas: 3
+
+certs_path: '{{ role_path }}/files'
+tls_crt: '{{ certs_path }}/cockroach.crt'
+tls_key: '{{ certs_path }}/cockroach.key'
+tls_secret_name: cockroach-tls

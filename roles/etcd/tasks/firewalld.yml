@@ -1,0 +1,13 @@
+---
+
+- name: Open firewalld port for etcd
+  firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    immediate: true
+    state: enabled
+  with_items:
+    - "{{ etcd_client_port }}"
+    - "{{ etcd_peer_port }}"
+
+

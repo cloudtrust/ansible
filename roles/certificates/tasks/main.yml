@@ -1,0 +1,10 @@
+---
+- name: Pull pki
+  import_tasks: build.yml
+  run_once: true
+  delegate_to: 127.0.0.1
+  tags: ca, build
+
+- name: Deploy pki
+  import_tasks: deploy.yml
+  tags: ca, deploy

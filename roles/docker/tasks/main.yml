@@ -1,0 +1,18 @@
+---
+
+#- name: Ensure docker is installed
+  #shell: dnf install -y docker
+  #tags: deploy
+
+- name: Write docker.service systemd file
+  template:
+    src: docker.service.j2
+    dest: /etc/systemd/system/docker.service
+  tags: deploy
+
+- name: Restart docker
+  systemd:
+    name: docker
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

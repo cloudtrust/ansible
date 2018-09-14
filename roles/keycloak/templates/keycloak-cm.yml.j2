@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak
+data:
+  standalone.xml: |
+    {{ lookup('template', role_path + '/templates/standalone-ha.xml.j2') | indent(4,False) }}
+binaryData:
+  cacerts: {{ lookup('file', role_path + '/files/cacerts.b64') }}
+  krb5.keytab: {{ lookup('file', role_path + '/files/krb5.keytab.b64') }}
+

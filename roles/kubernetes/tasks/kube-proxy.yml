@@ -1,0 +1,14 @@
+---
+
+- name: Install the kubeproxy binary
+  shell: dnf install -y kubernetes
+
+#- name: Deploy kube-proxy.kubeconfig
+#  template:
+#    src: kube-proxy.kubeconfig.j2
+#    dest: "{{ config_path }}/kube-proxy.kubeconfig"
+
+- name: Deploy kubelet service
+  template:
+    src: kube-proxy.service.j2
+    dest: "{{ kubeproxy_service_file }}"

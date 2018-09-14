@@ -1,0 +1,16 @@
+---
+
+- name: Stop docker
+  systemd:
+    name: docker
+    state: stopped
+
+- name: Clean docker config
+  command: rm -rf /var/lib/docker/*
+
+- name: Restart docker
+  systemd:
+    name: docker
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

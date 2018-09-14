@@ -1,0 +1,3 @@
+git_repo: ssh://git.elcanet.local:7999/cloudtrust/pki-config.git
+git_tag: master
+

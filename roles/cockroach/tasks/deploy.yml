@@ -1,0 +1,55 @@
+---
+
+- name: Copy the cockroach service template file
+  template:
+    src: "cockroach-svc.yml.j2"
+    dest: "{{ remote_path }}/cockroach-svc.yml"
+
+- name: Copy the cockroach configmap
+  template:
+    src: "cockroach-cm.yml.j2"
+    dest: "{{ remote_path }}/cockroach-cm.yml"
+
+- name: Copy the cockroach headless service template file
+  template:
+    src: "cockroach-headless-svc.yml.j2"
+    dest: "{{ remote_path }}/cockroach-headless-svc.yml"
+
+- name: Copy the cockroach tls secret template file
+  template:
+    src: "cockroach-tls.yml.j2"
+    dest: "{{ remote_path }}/cockroach-tls.yml"
+
+- name: Copy the cockroach ingress template file
+  template:
+    src: "cockroach-ing.yml.j2"
+    dest: "{{ remote_path }}/cockroach-ing.yml"
+
+- name: Copy the cockroach deployment template file
+  template:
+    src: "cockroach-ss.yml.j2"
+    dest: "{{ remote_path }}/cockroach-ss.yml"
+
+- name: Deploy cockroach service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/cockroach-svc.yml
+  run_once: true
+
+- name: Deploy cockroach config
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/cockroach-cm.yml
+  run_once: true
+
+- name: Deploy cockroach headless service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/cockroach-headless-svc.yml
+  run_once: true
+
+- name: Deploy cockroach tls secret
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/cockroach-tls.yml
+  run_once: true
+
+- name: Deploy cockroach ingress
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/cockroach-ing.yml
+  run_once: true
+
+- name: Deploy cockroach stateful set
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/cockroach-ss.yml
+  run_once: true

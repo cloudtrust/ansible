@@ -1,0 +1,56 @@
+---
+- name: Repository
+  import_tasks: repository.yml
+  tags: repo, deploy
+
+- name: Kubelet
+  import_tasks: kubelet.yml
+  tags: kubelet, deploy
+
+- name: Master Certificates
+  import_tasks: master-certificates.yml
+  when: inventory_hostname in groups['kube-master']
+  tags: certificates, deploy
+
+- name: Apiserver
+  import_tasks: apiserver.yml
+  when: inventory_hostname in groups['kube-master']
+  tags: apiserver, deploy
+
+- name: Deploy admin access token
+  import_tasks: tokens.yml
+  tags: tokens, deploy
+  
+- name: Controller Manager
+  import_tasks: controller-manager.yml
+  when: inventory_hostname in groups['kube-master']
+  tags: controller-manager, deploy
+
+- name: Scheduler
+  import_tasks: scheduler.yml
+  when: inventory_hostname in groups['kube-master']
+  tags: scheduler, deploy
+
+- name: Kube-Proxy
+  import_tasks: kube-proxy.yml
+  tags: kube-proxy, deploy
+
+- name: Startup the cluster
+  import_tasks: start_kubernetes.yml
+  tags: start, deploy
+
+- name: Wait for kubernetes to be up
+  import_tasks: start_wait.yml
+  when: inventory_hostname in groups['kube-master']
+  tags: start, deploy
+
+- name: Prepare dns dirs
+  import_tasks: kube-addon.yml
+  when: inventory_hostname in groups['kube-master']
+  tags: dns, deploy
+
+- name: Install DNS
+  import_tasks: kube-dns.yml
+  when: inventory_hostname in groups['kube-master']
+  run_once: true
+  tags: dns, deploy

@@ -1,0 +1,27 @@
+---
+- name: Copy the postgresql deployment template
+  template:
+    src: postgresql-dp.yml.j2
+    dest: "{{ remote_path }}/postgresql-dp.yml"
+
+- name: Copy the postgresql headless service template
+  template:
+    src: postgresql-headless-svc.yml.j2
+    dest: "{{ remote_path }}/postgresql-headless-svc.yml"
+
+- name: Copy the postgresql service template
+  template:
+    src: postgresql-svc.yml.j2
+    dest: "{{ remote_path }}/postgresql-svc.yml"
+
+- name: Deploy postgresql headless service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/postgresql-headless-svc.yml
+  run_once: true
+
+- name: Deploy postgresql service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/postgresql-svc.yml
+  run_once: true
+
+- name: Deploy postgresql deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/postgresql-dp.yml
+  run_once: true

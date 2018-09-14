@@ -1,0 +1,54 @@
+---
+
+- name: create etcd ssl files path
+  file:
+    path: "{{ etcd_ssl }}"
+    state: directory
+    mode: 0775
+
+- name: Deploy ssl certificates
+  copy:
+    src: "{{ item }}"
+    dest: "{{ etcd_ssl }}"
+    mode: 0775
+  when: etcd_scheme == "https"
+  with_fileglob:
+    - "{{ role_path }}/files/*.crt"
+    - "{{ role_path }}/files/*.key"
+
+- name: Deploy etcd configuration
+  template:
+    src: "etcd.conf.j2"
+    dest: "{{ etcd_conf }}"
+    mode: 0664
+
+- name: Deploy service file
+  template:
+    src: etcd.service.j2
+    dest: /etc/systemd/system/etcd.service
+
+- name: Start service
+  systemd:
+    daemon_reload: yes
+    name: etcd
+    enabled: yes
+    state: restarted
+
+- name: Wait for etcd
+  uri:
+    url: "{{ etcd_scheme }}://localhost:{{etcd_client_port}}/version"
+    validate_certs: no
+  register: result
+  until: result.status == 200
+  retries: 10
+  delay: 30
+
+- name: Create keys
+  etcd:
+    state: present
+    host: 127.0.0.1
+    port: 2379
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_dict: "{{ etcd_key_vals }}"
+  when: init_etcd == "yes"

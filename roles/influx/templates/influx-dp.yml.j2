@@ -1,0 +1,58 @@
+---
+
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{ base_name }}
+spec:
+  podManagementPolicy: Parallel
+  serviceName: {{ base_name }}
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: {{ base_name }}
+    spec:
+      containers:
+      - image: {{ image_name }}
+        imagePullPolicy: Never
+        name: {{ base_name }}
+        ports:
+          - containerPort: 80
+            name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: data
+          mountPath: /var/lib/influxdb
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "rbd"
+      resources:
+        requests:
+          storage: 2Gi

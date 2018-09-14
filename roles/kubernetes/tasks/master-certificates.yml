@@ -1,0 +1,30 @@
+---
+
+- name: Create kubernetes srv dir
+  file:
+    path: "{{ srv_kube_path }}"
+    state: directory
+    mode: 0740
+    owner: etcd
+    group: etcd
+    
+- name: Create directory for kube certs
+  file:
+    path: "{{ kube_certs_dir }}"
+    state: directory
+    mode: 0770
+    owner: root
+    group: root
+
+- name: Move kubernetes certificates over
+  copy:
+    src: "certs/{{ item }}"
+    dest: "{{ kube_certs_dir }}"
+    mode: 0440
+    owner: root
+    group: root
+  with_items:
+    - "{{ kube_server_cert_file }}"
+    - "{{ kube_server_key_file }}"
+    - "{{ kube_client_admin_cert_file }}"
+    - "{{ kube_client_admin_key_file }}"

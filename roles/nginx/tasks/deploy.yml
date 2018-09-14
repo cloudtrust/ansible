@@ -1,0 +1,60 @@
+---
+
+- name: create nginx files path
+  file:
+    path: "{{ nginx_srv }}"
+    state: directory
+    mode: 0775
+
+- name: create nginx data path
+  file:
+    path: "{{ nginx_srv_data }}"
+    state: directory
+    mode: 0775
+
+- name: Deploy nginx configuration
+  template:
+    src: "nginx.conf.j2"
+    dest: "{{ nginx_srv_main_conf }}"
+    mode: 0664
+
+- name: Deploy nginx auxilliary configuration
+  copy:
+    src: conf.d/
+    dest: "{{ nginx_srv_aux_conf }}"
+    mode: 0664
+
+- name: Deploy kickstarts
+  copy:
+    src: kickstarts/
+    dest: "{{ nginx_srv_data }}/kickstarts"
+    mode: 0664
+
+- name: Create container
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ image_name }}"
+    recreate: yes
+    state: present
+    restart_policy: no
+    network_mode: host
+    tmpfs:
+      - "/run"
+      - "/tmp"
+    volumes:
+      - "{{ nginx_srv_main_conf }}:{{ nginx_main_conf }}:ro,z"
+      - "{{ nginx_srv_aux_conf }}:{{ nginx_aux_conf }}:ro,z"
+      - "{{ nginx_srv_data }}:{{ nginx_data }}:ro,z"
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+
+- name: Deploy service file
+  template:
+    src: cloudtrust-nginx.service.j2
+    dest: /etc/systemd/system/cloudtrust-nginx.service
+
+- name: Start service
+  systemd:
+    daemon_reload: yes
+    name: cloudtrust-nginx
+    enabled: yes
+    state: restarted

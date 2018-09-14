@@ -1,0 +1,43 @@
+---
+
+git_repo: git@github.com:cloudtrust/etcd-service.git
+
+archive_name: etcd.tar
+
+dockerfile: cloudtrust-etcd.dockerfile
+
+pull_path: '{{ playbook_dir }}/pull/etcd'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+image_name: 'cloudtrust-etcd:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
+
+remote_path: /cloudtrust/etcd
+
+container_name: etcd
+
+etcd_peer_port: 2380
+etcd_peers_group: etcd
+etcd_initial_cluster_state: new
+
+etcd_initial_advertise_peer_urls: "{{ etcd_scheme }}://{{ ansible_fqdn }}:{{ etcd_peer_port }}"
+etcd_listen_peer_urls: "{{ etcd_scheme }}://0.0.0.0:{{ etcd_peer_port }}"
+etcd_advertise_client_urls: "{{ etcd_scheme }}://{{ ansible_fqdn }}:{{ etcd_client_port }}"
+etcd_listen_client_urls: "{{ etcd_scheme }}://0.0.0.0:{{ etcd_client_port }}"
+
+etcd_server_cert_file: etcd_server.crt
+etcd_server_key_file: etcd_server.key
+etcd_peer_cert_file: etcd_peer.crt
+etcd_peer_key_file: etcd_peer.key
+etcd_client_cert_file: etcd_client.crt
+etcd_client_key_file: etcd_client.key
+
+etcd_srv: /srv/etcd
+etcd_srv_ssl: "{{ etcd_srv }}/ssl"
+etcd_srv_conf: "{{ etcd_srv }}/etcd.conf"
+etcd_srv_data: "{{ etcd_srv }}/data"
+
+etcd_ssl: "/etc/ssl/etcd"
+etcd_conf: "/etc/etcd/etcd.conf"
+etcd_data: "/var/lib/etcd"
+
+init_etcd: no

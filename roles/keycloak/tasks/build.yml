@@ -1,0 +1,39 @@
+---
+- name: Pull repository
+  git:
+    repo: '{{ git_repo }}'
+    dest: '{{ pull_path }}'
+    version: '{{ git_tag }}'
+
+- name: Create build context
+  file:
+    path: '{{ context }}'
+    state: directory
+
+- name: Copy dockerfile to build context
+  copy:
+    src: '{{ dockerfile_path }}/{{ dockerfile }}'
+    dest: '{{ context }}/Dockerfile'
+
+- name: Build the image
+  docker_image:
+    name: '{{ image_name }}'
+    path: '{{ context }}'
+    nocache: "{{ force | default('no') }}"
+    timeout: 1000
+    force: yes
+    pull: False
+    state: present
+    archive_path: '{{ context }}/{{ archive_name }}.tar'
+    buildargs:
+      keycloak_service_git_tag: '{{ git_tag }}'
+      event_emitter_release: '{{ event_emitter_release }}'
+      keycloak_bridge_release: '{{ keycloak_bridge_release }}'
+      jaeger_release: '{{ jaeger_release }}'
+      wsfed_release: '{{ wsfed_release }}'
+      keycloak_export_release: '{{ keycloak_export_release }}'
+      keycloak_authorization_release: '{{ keycloak_authorization_release }}'
+      keycloak_client_mappers_release: '{{ keycloak_client_mappers_release }}'
+      keycloak_release: '{{ keycloak_release }}'
+      config_git_tag: '{{ config_git_tag }}'
+      config_repo: '{{ config_repo }}'

@@ -1,0 +1,19 @@
+---
+- name: Copy the service template file
+  template:
+    src: redis-svc.yml.j2
+    dest: "{{ remote_path }}/redis-svc.yml"
+
+- name: Copy the deployment template file
+  template:
+    src: redis-dp.yml.j2
+    dest: "{{ remote_path }}/redis-dp.yml"
+
+- name: Deploy redis service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/redis-svc.yml
+  run_once: true
+
+- name: Deploy redis deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/redis-dp.yml
+  run_once: true
+

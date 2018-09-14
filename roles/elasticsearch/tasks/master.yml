@@ -1,0 +1,29 @@
+---
+
+- name: Deploy headless service
+  template:
+    src: elasticsearch-headless-svc.yml.j2
+    dest: "{{ remote_path }}/elasticsearch-headless-svc.yml"
+
+- name: Deploy master configmap
+  template:
+    src: elasticsearch-master-cm.yml.j2
+    dest: "{{ remote_path }}/elasticsearch-master-cm.yml"
+
+- name: Deploy master deployment
+  template:
+    src: elasticsearch-master-dp.yml.j2
+    dest: "{{ remote_path }}/elasticsearch-master-dp.yml"
+
+
+- name: Create headless service
+  shell: kubectl replace --force -f {{ remote_path }}/elasticsearch-headless-svc.yml
+  run_once: true
+
+- name: Create configmap
+  shell: kubectl replace --force -f {{ remote_path }}/elasticsearch-master-cm.yml
+  run_once: true
+
+- name: Create deployment
+  shell: kubectl replace --force -f {{ remote_path }}/elasticsearch-master-dp.yml
+  run_once: true

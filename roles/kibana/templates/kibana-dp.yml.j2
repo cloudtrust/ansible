@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kibana
+spec:
+  podManagementPolicy: Parallel
+  serviceName: kibana
+  replicas: {{ replicas }}
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - image: {{ image_name }}
+        imagePullPolicy: Never
+        name: elasticsearch
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: config
+          mountPath: /etc/elasticsearch/elasticsearch.yml
+          subPath: elasticsearch.yml
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: config
+        configMap:
+          name: elasticsearch-client

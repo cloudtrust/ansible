@@ -1,0 +1,34 @@
+---
+
+- name: Install unbound
+  command: dnf -y install unbound
+
+- name: Deploy unbound configuration
+  template:
+    src: unbound.conf.j2
+    dest: /etc/unbound/unbound.conf
+    owner: unbound
+    group: unbound
+    mode: 0664
+
+- name: Remove dns from NetworkManager
+  lineinfile:
+    dest: /etc/NetworkManager/NetworkManager.conf
+    line: "dns=none"
+    insertafter: "^\\[main\\]"
+    state: present
+
+- name: Create resolv.conf file
+  template:
+    src: "resolv.conf.j2"
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 644
+
+- name: start unbound
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+    name: unbound

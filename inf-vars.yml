@@ -1,0 +1,4 @@
+config_repo: ssh://git@git.elcanet.local:7999/cloudtrust/infra-config.git
+config_repo_name: inf
+config_git_tag: initial
+

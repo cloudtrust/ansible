@@ -1,0 +1,35 @@
+---
+
+- name: Build image locally
+  import_tasks: build.yml
+  tags: build
+  delegate_to: 127.0.0.1
+  run_once: true
+
+- name: Deploy elasticsearch master 
+  import_tasks: push.yml
+  tags: push
+
+- name: Expand mmapfs usage
+  sysctl:
+    name: 'vm.max_map_count'
+    value: '262144'
+  tags: deploy
+
+- name: Deploy elasticsearch master 
+  import_tasks: master.yml
+  tags: deploy, master
+
+- name: Deploy elasticsearch data 
+  import_tasks: data.yml
+  tags: deploy, data
+
+- name: Cleanup local pull dirs
+  import_tasks: cleanup_pull.yml
+  run_once: true
+  tags: cleanup_pull, cleanup
+  delegate_to: 127.0.0.1
+
+- name: Cleanup push dirs
+  import_tasks: cleanup_push.yml
+  tags: cleanup_push, cleanup

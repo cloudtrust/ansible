@@ -1,0 +1,27 @@
+dockerfile: 'cloudtrust-keycloak.dockerfile'
+git_repo: 'git@github.com:cloudtrust/keycloak-service.git'
+
+image_name: 'cloudtrust-keycloak:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
+
+archive_name: keycloak
+
+pull_path: '{{ playbook_dir }}/pull/keycloak'
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+
+base_name: 'keycloak'
+remote_path: '/var/cloudtrust/keycloak'
+
+certs_path: '{{ role_path }}/files'
+tls_crt: '{{ certs_path }}/keycloak.crt'
+tls_key: '{{ certs_path }}/keycloak.key'
+tls_secret_name: keycloak-tls
+
+replicas: 1
+
+jgroups_tcp_port: 7800
+jgroups_initial_hosts: "{% for i in range(replicas) %}keycloak-{{ i }}.keycloak-headless.default.svc.{{ cluster_name }}[{{ jgroups_tcp_port }}]{% if not loop.last %},{% endif %}{% endfor %}"
+
+jks_path: "/opt/keycloak/keycloak/cacerts"
+ 

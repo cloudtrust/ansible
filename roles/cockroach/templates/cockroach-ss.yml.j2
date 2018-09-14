@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cockroach
+spec:
+  podManagementPolicy: Parallel
+  serviceName: cockroach
+  replicas: {{ replicas }}
+  selector:
+    matchLabels:
+      app: cockroach
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: cockroach
+    spec:
+      containers:
+      - image: {{ image_name }}
+        imagePullPolicy: Never
+        name: cockroach
+        args:
+          - "/sbin/init"
+        ports:
+          - containerPort: 26257
+            name: grpc
+          - containerPort: 80
+            name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: config
+          mountPath: /etc/systemd/system/cockroach.service
+          subPath: cockroach.service
+        - name: data
+          mountPath: /var/lib/cockroach
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: config
+        configMap:
+          name: cockroach
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "rbd"
+      resources:
+        requests:
+          storage: 10Gi

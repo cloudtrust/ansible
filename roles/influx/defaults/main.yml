@@ -1,0 +1,15 @@
+archive_name: image
+git_repo: git@github.com:cloudtrust/influx-service.git
+
+remote_path: /cloudtrust/influx
+
+dockerfile: cloudtrust-influx.dockerfile
+image_name: 'cloudtrust-influx:{{ config_repo_name }}-{{ config_git_tag }}'
+
+pull_path: '{{ playbook_dir }}/pull/influx'
+
+base_name: influx
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+

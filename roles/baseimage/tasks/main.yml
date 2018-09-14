@@ -1,0 +1,13 @@
+---
+
+- name: Build baseimage locally
+  import_tasks: build.yml
+  run_once: true
+  tags: build
+  delegate_to: 127.0.0.1
+
+- name: Cleanup local pull dirs
+  import_tasks: cleanup.yml
+  run_once: true
+  tags: cleanup
+  delegate_to: 127.0.0.1

@@ -1,0 +1,32 @@
+{% macro initial_cluster() -%}
+{% for host in groups[etcd_peers_group] -%}
+  {{ hostvars[host]['ansible_hostname'] }}={{ etcd_scheme }}://{{ hostvars[host]['ansible_fqdn'] }}:{{ etcd_peer_port }}
+  {%- if not loop.last -%},{%- endif -%}
+{%- endfor -%}
+{% endmacro -%}
+
+ETCD_NAME={{ ansible_hostname }}
+ETCD_DEBUG=true
+ETCD_DATA_DIR={{ etcd_data }}
+
+#[cluster]
+ETCD_INITIAL_ADVERTISE_PEER_URLS={{ etcd_initial_advertise_peer_urls }}
+ETCD_INITIAL_CLUSTER={{ initial_cluster() }}
+ETCD_INITIAL_CLUSTER_STATE={{ etcd_initial_cluster_state }}
+ETCD_INITIAL_CLUSTER_TOKEN={{ etcd_initial_cluster_token }}
+ETCD_LISTEN_PEER_URLS={{ etcd_listen_peer_urls }}
+ETCD_ADVERTISE_CLIENT_URLS={{ etcd_advertise_client_urls }}
+ETCD_LISTEN_CLIENT_URLS="{{ etcd_listen_client_urls }}"
+
+{% if etcd_scheme == "https" %}
+#[security]
+ETCD_CERT_FILE={{ etcd_ssl }}/{{ etcd_server_cert_file }}
+ETCD_KEY_FILE={{ etcd_ssl }}/{{ etcd_server_key_file }}
+ETCD_PEER_CERT_FILE={{ etcd_ssl }}/{{ etcd_peer_cert_file }}
+ETCD_PEER_KEY_FILE={{ etcd_ssl }}/{{ etcd_peer_key_file }}
+ETCD_TRUSTED_CA_FILE={{ ca_cert }}
+ETCD_PEER_CA_FILE={{ ca_cert }}
+ETCD_CLIENT_CERT_AUTH=false
+ETCD_PEER_CLIENT_CERT_AUTH=true
+{% endif %}
+

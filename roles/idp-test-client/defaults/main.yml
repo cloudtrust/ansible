@@ -1,0 +1,20 @@
+archive_name: idp-client
+git_tag: master
+replicas: 1
+
+git_repo: git@github.com:cloudtrust/idp-test-client-service.git
+
+dockerfile: cloudtrust-idpTestClient.dockerfile
+
+pull_path: '{{ playbook_dir }}/pull/idp-client'
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+image_name: 'cloudtrust-idp-client:{{ config_repo_name }}-{{ config_git_tag }}'
+
+remote_path: /cloudtrust/idp-test-client
+
+tls_secret_name: idp-test-client-tls
+tls_crt: idp-test-client.crt
+tls_key: idp-test-client.key
+server_name: int-client.cloudtrust.io

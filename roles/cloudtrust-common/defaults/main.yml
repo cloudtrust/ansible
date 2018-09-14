@@ -1,0 +1,3 @@
+pull_path: '{{ role_path }}/cloudtrust_common'
+git_repo: 'git@github.com:cloudtrust/cloudtrust-common.git'
+commit_version: 'master'

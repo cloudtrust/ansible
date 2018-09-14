@@ -1,0 +1,13 @@
+[Unit]
+After=network-online.target
+Wants=network-online.target
+Description=flannel is an etcd backed overlay network for containers
+
+[Service]
+Type=notify
+EnvironmentFile={{ flannel_config_dir }}/flanneld
+ExecStart=/usr/bin/flanneld
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

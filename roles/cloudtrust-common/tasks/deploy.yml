@@ -1,0 +1,58 @@
+---
+
+- name: Install required tools on remote
+  shell: dnf install -y '{{ item }}'
+  with_items:
+    - cockpit
+    - cockpit-kdump
+    - cockpit-docker
+    - cockpit-selinux
+    - cockpit-kubernetes
+    - https://dl.influxdata.com/telegraf/releases/telegraf-1.4.4-1.x86_64.rpm
+
+- name: Install io-scheduler service
+  copy:
+    src: '{{ pull_path }}/deploy/common/etc/systemd/system/io-scheduler.service'
+    dest: '/etc/systemd/system/io-scheduler.service'
+
+- name: Install cloudtrust.conf
+  copy:
+    src: '{{ pull_path }}/deploy/common/etc/sysctl.d/cloudtrust.conf'
+    dest: '/etc/sysctl.d/cloudtrust.conf'
+
+- name: Enable and start io-scheduler
+  systemd:
+    name: io-scheduler
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+
+- name: Install telegraf
+  template:
+    src: 'telegraf.conf.j2'
+    dest: '/etc/telegraf/telegraf.conf'
+
+- name: Allow telegraf access to docker
+  user:
+    append: yes
+    groups: [ docker ]
+    name: telegraf
+
+- name: Enable and start telegraf
+  systemd:
+    name: telegraf
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+
+- name: Enable and start cockpit
+  systemd:
+    name: cockpit
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+
+#- name: Install resolv.conf
+#  template:
+#    src: resolv.conf.j2
+#    dest: /etc/resolv.conf

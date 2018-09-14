@@ -1,0 +1,60 @@
+---
+
+- name: Create unbound server path
+  file:
+    path: "{{ unbound_srv }}"
+    state: directory
+
+- name: Move main configuration over
+  template:
+    src: unbound.conf.j2
+    dest: "{{ unbound_srv_main_conf }}"
+
+- name: Move configuration over
+  copy:
+    src: conf.d/
+    dest: "{{ unbound_srv_aux_conf }}"
+
+- name: Create container
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ image_name }}"
+    recreate: yes
+    state: present
+    restart_policy: no
+    network_mode: host
+    tmpfs:
+      - "/run"
+      - "/tmp"
+    volumes:
+      - "{{ unbound_srv_main_conf }}:{{ unbound_main_conf }}:ro,z"
+      - "{{ unbound_srv_aux_conf }}:{{ unbound_aux_conf }}:ro,z"
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+
+- name: Deploy service file
+  template:
+    src: cloudtrust-unbound.service.j2
+    dest: /etc/systemd/system/cloudtrust-unbound.service
+
+- name: Activate and run unit
+  systemd:
+    name: cloudtrust-unbound.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+- name: Remove dns from NetworkManager
+  lineinfile:
+    dest: /etc/NetworkManager/NetworkManager.conf
+    line: "dns=none"
+    insertafter: "^\\[main\\]"
+    state: present
+
+- name: Create resolv.conf file
+  template:
+    src: "resolv.conf.j2"
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 644
+

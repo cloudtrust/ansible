@@ -1,0 +1,27 @@
+---
+- name: Copy the config template file
+  template:
+    src: logstash-cm.yml.j2
+    dest: "{{ remote_path }}/logstash-cm.yml"
+
+- name: Copy the service template file
+  template:
+    src: logstash-svc.yml.j2
+    dest: "{{ remote_path }}/logstash-svc.yml"
+
+- name: Copy the deployment template file
+  template:
+    src: logstash-dp.yml.j2
+    dest: "{{ remote_path }}/logstash-dp.yml"
+
+- name: Deploy logstash service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/logstash-cm.yml
+  run_once: true
+
+- name: Deploy logstash service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/logstash-svc.yml
+  run_once: true
+
+- name: Deploy logstash deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/logstash-dp.yml
+  run_once: true

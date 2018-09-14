@@ -1,0 +1,8 @@
+---
+
+- name: Create the addon namespace
+  shell: kubectl replace --force -f "{{ kube_addon_dir }}/namespace.yml"
+
+- name: Create dns
+  shell: kubectl replace --force -f "{{ kube_addon_dir }}/kube-dns.yml"
+

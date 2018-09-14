@@ -1,0 +1,7 @@
+---
+
+- name: Copy the apiserver template
+  template:
+    src: kube-apiserver.yml.j2
+    dest: "{{ manifests_path }}/kube-apiserver.yml"
+

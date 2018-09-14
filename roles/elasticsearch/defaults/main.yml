@@ -1,0 +1,10 @@
+archive_name: els
+git_repo: git@github.com:cloudtrust/elasticsearch-service.git
+dockerfile: cloudtrust-elasticsearch.dockerfile
+
+pull_path: '{{ playbook_dir }}/pull/elasticsearch'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+image_name: 'cloudtrust-elasticsearch:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
+
+remote_path: /cloudtrust/elasticsearch

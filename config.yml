@@ -1,0 +1,85 @@
+---
+
+- name: Deploy the cloudtrust base-image
+  hosts: 127.0.0.1
+  vars_files:
+    - "{{ vars_file }}"
+  tasks:
+    - name: Ensure that config dir is empty
+      file:
+        path: '{{ playbook_dir }}/config'
+        state: absent
+      tags: always
+    
+    - name: Get that repo
+      git:
+        repo: '{{ config_repo }}'
+        dest: '{{ playbook_dir }}/config'
+        version: '{{ config_git_tag }}'
+      tags: always
+    
+    - name: Deploy everything in deploy
+      shell: rsync -a {{ playbook_dir }}/config/deployable/ {{ playbook_dir }}/
+      register: msg
+      tags: deploy
+
+    - name: Get git config commit
+      command: "git rev-parse --short HEAD"
+      args:
+        chdir: "{{ playbook_dir }}/config"
+      register: git_reg
+      tags: always
+
+    - name: Show git commit
+      debug:
+        msg: "{{ git_reg.stdout }}"
+      tags: always
+
+    - name: Set the variable
+      set_fact:
+        config_commit: "{{ git_reg.stdout }}"
+      tags: always
+
+    - name: Put configs in group_vars/all.yml
+      lineinfile:
+        dest: "{{ playbook_dir }}/group_vars/all.yml"
+        state: present
+        regexp: "^{{ item.name }}:"
+        line: "{{ item.name }}: {{ item.value }}"
+      with_items:
+          - { name: "config_repo", value: "{{ config_repo }}" }
+          - { name: "config_git_tag", value: "{{ config_commit }}"}
+          - { name: "config_repo_name", value: "{{ config_repo_name }}" }
+      tags: deploy
+
+    - name: Generate .gitignore file for current deployment
+      shell: echo -e "config\ninventories\npull\nvenv"; find . -type f | sed 's:\./::'
+      args:
+        chdir: '{{ playbook_dir }}/config/deployable'
+      register: deployed_files
+      tags: deploy
+    
+    - name: Output deployed_files
+      debug: msg={{ deployed_files.stdout }}
+      tags: deploy
+
+    - name: Write gitignore
+      lineinfile:
+        line: "{{ item }}"
+        dest: "{{ playbook_dir }}/.gitignore"
+      with_items:
+        - "{{ deployed_files.stdout_lines }}"
+      tags: deploy
+
+    
+    - name: Write gitignore
+      lineinfile:
+        line: "{{ item }}"
+        dest: "{{ playbook_dir }}/.gitignore"
+      with_items:
+        - "{{ deployed_files.stdout_lines }}"
+      tags: deploy
+
+    - name: Clean config
+      shell: for i in $(find {{ playbook_dir }}/config/deployable -type f); do rm -f {{ playbook_dir }}/${i#{{ playbook_dir }}/config/deployable/}; done
+      tags: cleanup

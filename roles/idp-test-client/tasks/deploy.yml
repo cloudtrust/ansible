@@ -1,0 +1,87 @@
+---
+
+- name: Deploy client Configmap
+  vars:
+    - client: "{{ item }}"
+  template:
+    src: idp-client-cm.yml.j2
+    dest: "{{ remote_path }}/idp-client-{{ client.name }}-cm.yml"
+  with_items:
+    - "{{ clients }}"
+
+- name: Deploy client deployment
+  vars:
+    - client: "{{ item }}"
+  template:
+    src: idp-client-dp.yml.j2
+    dest: "{{ remote_path }}/idp-client-{{ client.name }}-dp.yml"
+  with_items:
+    - "{{ clients }}"
+
+- name: Deploy client configmap
+  vars:
+    - client: "{{ item }}"
+  template:
+    src: idp-client-svc.yml.j2
+    dest: "{{ remote_path }}/idp-client-{{ client.name }}-svc.yml"
+  with_items:
+    - "{{ clients }}"
+
+- name: Deploy client tls keys
+  vars:
+    - client: "{{ item }}"
+  template:
+    src: idp-client-tls.yml.j2
+    dest: "{{ remote_path }}/idp-client-{{ client.name }}-tls.yml"
+  with_items:
+    - "{{ clients }}"
+
+- name: Deploy client ingress
+  vars:
+    - client: "{{ item }}"
+  template:
+    src: idp-client-ing.yml.j2
+    dest: "{{ remote_path }}/idp-client-{{ client.name }}-ing.yml"
+  with_items:
+    - "{{ clients }}"
+
+- name: Create cm
+  vars:
+    - client: "{{ item }}"
+  shell: kubectl replace --force -f {{ remote_path }}/idp-client-{{ client.name }}-cm.yml
+  with_items:
+    - "{{ clients }}"
+  run_once: true
+
+- name: Create svc
+  vars:
+    - client: "{{ item }}"
+  shell: kubectl replace --force -f {{ remote_path }}/idp-client-{{ client.name }}-svc.yml
+  with_items:
+    - "{{ clients }}"
+  run_once: true
+
+- name: Create tls
+  vars:
+    - client: "{{ item }}"
+  shell: kubectl replace --force -f {{ remote_path }}/idp-client-{{ client.name }}-tls.yml
+  with_items:
+    - "{{ clients }}"
+  run_once: true
+
+- name: Create 
+  vars:
+    - client: "{{ item }}"
+  shell: kubectl replace --force -f {{ remote_path }}/idp-client-{{ client.name }}-ing.yml
+  with_items:
+    - "{{ clients }}"
+  run_once: true
+
+- name: Create deployment
+  vars:
+    - client: "{{ item }}"
+  shell: kubectl replace --force -f {{ remote_path }}/idp-client-{{ client.name }}-dp.yml
+  with_items:
+    - "{{ clients }}"
+  run_once: true
+

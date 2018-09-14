@@ -1,0 +1,22 @@
+git_repo: git@github.com:cloudtrust/unbound-service.git
+archive_name: unbound.tar
+
+dockerfile: cloudtrust-unbound.dockerfile
+
+pull_path: '{{ playbook_dir }}/pull/unbound'
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+image_name: 'cloudtrust-unbound:{{ git_tag }}-{{ config_repo_name }}-{{ config_git_tag }}'
+
+remote_path: /cloudtrust/unbound
+
+container_name: unbound
+
+unbound_srv: /srv/unbound
+unbound_srv_main_conf: /srv/unbound/unbound.conf
+unbound_srv_aux_conf: /srv/unbound/conf.d
+
+unbound_main_conf: /etc/unbound/unbound.conf
+unbound_aux_conf: /etc/unbound/conf.d
+
+

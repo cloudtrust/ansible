@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch-master
+spec:
+  podManagementPolicy: Parallel
+  serviceName: elasticsearch-master
+  replicas: {{ master_replicas }}
+  selector:
+    matchLabels:
+      app: elasticsearch
+      role: master
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: elasticsearch
+        role: master
+    spec:
+      containers:
+      - image: {{ image_name }}
+        imagePullPolicy: Never
+        name: elasticsearch
+        ports:
+        - containerPort: 9200
+          name: http 
+        - containerPort: 9300
+          name: transport
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: data
+          mountPath: {{ data_path }}
+        - name: config
+          mountPath: /etc/elasticsearch/jvm.options
+          subPath: jvm.options
+        - name: config
+          mountPath: /etc/elasticsearch/elasticsearch.yml
+          subPath: elasticsearch.yml
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: config
+        configMap:
+          name: elasticsearch-master
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "rbd"
+      resources:
+        requests:
+          storage: 2Gi

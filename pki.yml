@@ -1,0 +1,8 @@
+---
+
+- name: Get and install CA certificates
+  hosts: all
+  become: yes
+  roles:
+    - certificates
+  tags: ca

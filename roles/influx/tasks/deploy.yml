@@ -1,0 +1,19 @@
+---
+
+- name: Copy the service template file
+  template:
+    src: influx-svc.yml.j2
+    dest: "{{ remote_path }}/influx-svc.yml"
+
+- name: Copy the deployment template file
+  template:
+    src: influx-dp.yml.j2
+    dest: "{{ remote_path }}/influx-dp.yml"
+
+- name: Deploy influx service
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/influx-svc.yml
+  run_once: true
+
+- name: Deploy influx deployment
+  shell: kubectl --kubeconfig={{ kubeconfig }} replace --force -f {{ remote_path }}/influx-dp.yml
+  run_once: true

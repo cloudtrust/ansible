@@ -1,0 +1,19 @@
+---
+
+- name: Install required packages
+  import_tasks: packages.yml
+  tags: deploy
+
+- name: Open up internal traffic
+  import_tasks: firewalld.yml
+  tags: deploy
+
+#- name: Install docker
+  #import_tasks: docker_install.yml
+  #tags: deploy
+
+- name: Set that selinux boolean
+  seboolean:
+    name: "container_manage_cgroup"
+    state: yes
+    persistent: yes

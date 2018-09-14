@@ -1,0 +1,56 @@
+---
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: logstash
+spec:
+  replicas: {{ replicas }}
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: logstash
+    spec:
+      containers:
+      - image: {{ image_name }}
+        imagePullPolicy: Never
+        name: logstash
+        ports:
+          - containerPort: 9600
+            name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: data
+          mountPath: /var/lib/logstash
+        - name: config
+          mountPath: /etc/logstash/conf.d
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 3
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: config
+        configMap:
+          name: logstash
+      - name: data
+        emptyDir:
+          medium: ""

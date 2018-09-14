@@ -1,0 +1,40 @@
+#Redis input
+input {
+    redis {
+        data_type => "list"
+        host => "redis"
+        password => "redis"
+        key => "keycloak-bridge"
+        codec => "json"
+        threads => 4
+        batch_count => 100
+        tags => ["logstash_app", "usededot"]
+    }
+}
+
+filter {
+  if "usededot" in [tags] {
+    de_dot{
+    }
+    mutate {
+      add_tag => ["processed"]
+    }
+  }
+}
+
+filter {
+  if "processed" not in [tags] {
+    drop { }
+  }
+}
+
+#Elasticsearch output
+output{
+      if "logstash_app" in [tags] {
+         elasticsearch {
+           hosts => ["elasticsearch-master-0.elasticsearch-master.default.svc.cloudtrust"]
+           index =>"int-technical-log-%{+YYYY.MM.dd}"
+          }
+      }
+}
+

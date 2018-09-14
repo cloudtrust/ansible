@@ -1,0 +1,14 @@
+dockerfile: cloudtrust-baseimage.dockerfile
+git_repo: 'git@github.com:cloudtrust/baseimage.git'
+
+pull_path: '{{ playbook_dir }}/pull/baseimage'
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+image_path: '{{ pull_path }}/images'
+image_name: 'cloudtrust-baseimage:{{ tag }}'
+
+remote_path: '/cloudtrust/baseimage'
+
+keys_path: '{{ role_path }}/keys'
+known_hosts_file: known_hosts

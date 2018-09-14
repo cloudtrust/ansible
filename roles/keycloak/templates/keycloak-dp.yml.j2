@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ base_name }}
+spec:
+  podManagementPolicy: Parallel
+  serviceName: keycloak-headless
+  replicas: {{ replicas }}
+  selector:
+    matchLabels:
+      app: {{ base_name }}
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: {{ base_name }}
+    spec:
+      containers:
+      - image: {{ image_name }}
+        imagePullPolicy: Never
+        name: {{ base_name }}
+        args:
+          - "/sbin/init"
+        ports:
+          - containerPort: 8888
+            name: http-bridge
+          - containerPort: 5555
+            name: grpc
+          - containerPort: 80
+            name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: config
+          mountPath: /etc/krb5.keytab
+          subPath: krb5.keytab
+          readOnly: yes
+        - name: config
+          mountPath: {{ jks_path }}
+          subPath: cacerts
+          readOnly: yes
+        - name: config
+          mountPath: /opt/keycloak/keycloak/standalone/configuration/standalone.xml
+          subPath: standalone.xml
+          readOnly: yes
+        readinessProbe:
+          httpGet:
+            path: /auth
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 3
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: config
+        configMap:
+          name: keycloak

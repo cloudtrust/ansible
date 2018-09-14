@@ -1,0 +1,51 @@
+---
+
+- name: Ensure remote path exists
+  file:
+    path: "{{ remote_path }}"
+    state: directory
+  tags: deploy
+
+- name: Push namespace config
+  template:
+    src: namespace.yml.j2
+    dest: "{{ remote_path }}/namespace.yml"
+  tags: deploy
+
+- name: Push ingress configmap
+  template:
+    src: ingress-cm.yml.j2
+    dest: "{{ remote_path }}/ingress-cm.yml"
+  tags: deploy
+
+- name: Push default backend deployment
+  template:
+    src: ingress-default-dp.yml.j2
+    dest: "{{ remote_path }}/ingress-default-dp.yml"
+  tags: deploy
+
+- name: Push ingress deployment
+  template:
+    src: ingress-dp.yml.j2
+    dest: "{{ remote_path }}/ingress-dp.yml"
+  tags: deploy
+
+- name: Create namespace
+  shell: kubectl --kubeconfig=/etc/kubernetes/admin.kubeconfig replace --force -f {{ remote_path }}/namespace.yml
+  run_once: true
+  tags: deploy
+
+- name: Create ingress nginx
+  shell: kubectl --kubeconfig=/etc/kubernetes/admin.kubeconfig replace --force -f {{ remote_path }}/ingress-cm.yml
+  run_once: true
+  tags: deploy
+
+- name: Create default backend
+  shell: kubectl --kubeconfig=/etc/kubernetes/admin.kubeconfig replace --force -f {{ remote_path }}/ingress-default-dp.yml
+  run_once: true
+  tags: deploy
+
+- name: Create ingress nginx
+  shell: kubectl --kubeconfig=/etc/kubernetes/admin.kubeconfig replace --force -f {{ remote_path }}/ingress-dp.yml
+  run_once: true
+  tags: deploy

@@ -1,0 +1,14 @@
+---
+- import_playbook: baseimage.yml
+- import_playbook: ceph.yml
+- import_playbook: postgresql.yml
+- import_playbook: elasticsearch.yml
+- import_playbook: logstash.yml
+- import_playbook: influx.yml
+- import_playbook: redis.yml
+- import_playbook: kibana.yml
+- import_playbook: jaeger.yml
+- import_playbook: flaki.yml
+- import_playbook: sentry.yml
+- import_playbook: keycloak.yml
+- import_playbook: grafana.yml

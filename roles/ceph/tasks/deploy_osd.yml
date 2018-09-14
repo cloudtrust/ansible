@@ -1,0 +1,24 @@
+---
+
+- name: Osd data directory
+  file:
+    path: /var/lib/ceph/osd
+    state: directory
+
+- name: Deploy osd secret template
+  template: 
+    src: osd-secret.yml.j2
+    dest: "{{ remote_path }}/osd-secret.yml"
+
+- name: Deploy osd deployment template
+  template:
+    src: osd-ds.yml.j2
+    dest: "{{ remote_path }}/osd-ds.yml"
+
+- name: Create osd secret
+  shell: kubectl replace --force -f {{ remote_path }}/osd-secret.yml
+  run_once: true
+
+- name: Create ceph osd daemonset
+  shell: kubectl replace --force -f {{ remote_path }}/osd-ds.yml
+  run_once: true

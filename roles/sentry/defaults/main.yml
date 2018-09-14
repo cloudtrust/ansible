@@ -1,0 +1,19 @@
+base_name: sentry
+git_repo: git@github.com:cloudtrust/sentry-service.git
+
+
+
+dockerfile: cloudtrust-sentry.dockerfile
+image_name: 'cloudtrust-sentry:{{ config_repo_name }}-{{ config_git_tag }}'
+archive_name: image
+
+pull_path: '{{ playbook_dir }}/pull/sentry'
+remote_path: /cloudtrust/sentry
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+
+certs_path: '{{ role_path }}/files'
+tls_crt: '{{ certs_path }}/sentry.crt'
+tls_key: '{{ certs_path }}/sentry.key'
+tls_secret_name: sentry-tls

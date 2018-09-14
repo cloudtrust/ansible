@@ -1,0 +1,19 @@
+---
+
+- name: Install the kubelet binary
+  shell: dnf install -y kubernetes
+
+- name: Create manifests directory
+  file:
+    path: "{{ manifests_path }}"
+    state: directory
+
+- name: Deploy kubelet.kubeconfig
+  template:
+    src: admin.kubeconfig.j2
+    dest: "{{ kubeconfig }}"
+
+- name: Deploy kubelet service
+  template:
+    src: kubelet.service.j2
+    dest: "{{ kubelet_service_file }}"

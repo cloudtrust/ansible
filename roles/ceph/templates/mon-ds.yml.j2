@@ -1,0 +1,70 @@
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: mon
+  namespace: {{ namespace }}
+  labels:
+    app: mon
+spec:
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: mon
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      automountServiceAccountToken: false
+      volumes:
+      - name: run
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: {{ mon_secret_name }}
+        secret: 
+          secretName: {{ mon_secret_name }}
+      - name: {{ mon_data_dir }}
+        hostPath:
+          path: /var/lib/ceph/mon
+      containers:
+      - name: mon
+        image: {{ mon_image_name }}
+        ports:
+        - containerPort: 6789
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: run
+          mountPath: /run
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: {{ mon_secret_name }}
+          mountPath: /etc/ceph
+        - name: {{ mon_data_dir }}
+          mountPath: /var/lib/ceph/mon
+      securityContext:
+        seLinuxOptions:
+          type: "spc_t"
+          level: "s0"
+#         lifecycle:
+#           preStop:
+#             exec:
+#               command:
+#                 - "/bin/sh -c ceph mon remove $HOSTNAME"
+#         livenessProbe:
+#           tcpSocket:
+#             port: 6789
+#           initialDelaySeconds: 60
+#           timeoutSeconds: 5
+#         readinessProbe:
+#           tcpSocket:
+#             port: 6789
+#           timeoutSeconds: 5

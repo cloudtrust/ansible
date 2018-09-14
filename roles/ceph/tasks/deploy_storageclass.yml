@@ -1,0 +1,27 @@
+---
+- name: Deploy admin keyring template
+  template:
+    src: ceph-admin-key-sct.yml.j2
+    dest: "{{ remote_path }}/ceph-admin-key-sct.yml"
+
+- name: Deploy kube keyring template
+  template:
+    src: ceph-kube-key-sct.yml.j2
+    dest: "{{ remote_path }}/ceph-kube-key-sct.yml"
+
+- name: Deploy storage class template
+  template:
+    src: rbd-sc.yml.j2
+    dest: "{{ remote_path }}/rbd-sc.yml"
+
+- name: Create admin keyring secret
+  shell: kubectl replace --force -f {{ remote_path }}/ceph-admin-key-sct.yml
+  run_once: true
+
+- name: Create kube keyring secret
+  shell: kubectl replace --force -f {{ remote_path }}/ceph-kube-key-sct.yml
+  run_once: true
+
+- name: Create storage class
+  shell: kubectl replace --force -f {{ remote_path }}/rbd-sc.yml
+  run_once: true

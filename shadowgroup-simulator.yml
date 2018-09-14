@@ -1,0 +1,7 @@
+---
+
+- name: build and deploy for the shadowgroup-simulator
+  hosts: all
+  roles:
+    - shadowgroup-simulator
+  tags: shadowgroup-simulator

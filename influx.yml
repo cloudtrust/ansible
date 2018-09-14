@@ -1,0 +1,7 @@
+---
+
+- name: Deploy influx instances
+  hosts: all
+  roles:
+    - influx
+  tags: influx

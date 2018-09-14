@@ -1,0 +1,26 @@
+---
+
+- name: Create certs dir
+  file:
+    path: "{{ etcd_certs_dir }}"
+    state: directory
+    mode: 0740
+    owner: etcd
+    group: etcd
+    
+
+- name: Move etcd certificates over
+  copy:
+    src: "{{ item }}"
+    dest: "{{ etcd_certs_dir }}"
+    mode: 0440
+    owner: etcd
+    group: etcd
+  with_items:
+    - "{{ etcd_ca_file }}"
+    - "{{ etcd_server_cert_file }}"
+    - "{{ etcd_server_key_file }}"
+    - "{{ etcd_peer_cert_file }}"
+    - "{{ etcd_peer_key_file }}"
+    - "{{ etcd_client_cert_file }}"
+    - "{{ etcd_client_key_file }}"

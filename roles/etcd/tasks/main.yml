@@ -1,0 +1,19 @@
+---
+
+- name: Build the container
+  import_tasks: build.yml
+  delegate_to: 127.0.0.1
+  run_once: true
+  tags: build
+
+- name: Push and import on remote
+  import_tasks: push.yml
+  tags: push
+
+#- name: Open firewall
+  #import_tasks: firewalld.yml
+  #tags: deploy
+
+- name: Deploy configs and start service
+  import_tasks: deploy.yml
+  tags: deploy

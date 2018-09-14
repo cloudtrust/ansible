@@ -1,0 +1,15 @@
+archive_name: shadowgroup
+git_tag: master
+replicas: 1
+
+git_repo: git@github.com:cloudtrust/shadowgroup-simulator-service.git
+
+dockerfile: cloudtrust-shadowgroupSimulator.dockerfile
+
+pull_path: '{{ playbook_dir }}/pull/shadowgroup'
+
+dockerfile_path: '{{ pull_path }}/dockerfiles'
+context: '{{ pull_path }}/build_context'
+image_name: 'cloudtrust-shadowgroup:{{ config_repo_name }}-{{ config_git_tag }}'
+
+remote_path: /cloudtrust/shadowgroup

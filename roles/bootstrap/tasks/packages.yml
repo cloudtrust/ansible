@@ -1,0 +1,13 @@
+---
+
+- name: Install SELinux bindings
+  shell: dnf update -y
+
+- name: Install SELinux bindings
+  shell: dnf install -y '{{ item }}'
+  with_items:
+    - libselinux-python
+    - libsemanage-python
+    - python-docker-py
+    - python3-firewall
+    - ntpdate
